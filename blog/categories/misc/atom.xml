@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[code.eklund.io]]></title>
-  <link href="http://code.eklund.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Misc | code.eklund.io]]></title>
+  <link href="http://code.eklund.io/blog/categories/misc/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
   <updated>2014-05-21T14:26:04-04:00</updated>
   <id>http://code.eklund.io/</id>

@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://leklund.github.io/sitemap.xml 
+Sitemap: http://code.eklund.io/sitemap.xml 

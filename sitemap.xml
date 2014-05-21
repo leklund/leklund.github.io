@@ -1,15 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://leklund.github.io/blog/archives/</loc>
-        <lastmod>2014-04-04T13:48:51-04:00</lastmod>
+        <loc>http://code.eklund.io/blog/2014/05/21/first-post/</loc>
+        <lastmod>2014-05-21T14:22:20-04:00</lastmod>
     </url>
     <url>
-        <loc>http://leklund.github.io/</loc>
-        <lastmod>2014-04-04T13:48:51-04:00</lastmod>
+        <loc>http://code.eklund.io/about/</loc>
+        <lastmod>2014-05-21T13:09:23-04:00</lastmod>
     </url>
     <url>
-        <loc>http://leklund.github.io/robots.txt</loc>
-        <lastmod>2014-04-04T13:48:51-04:00</lastmod>
+        <loc>http://code.eklund.io/blog/archives/</loc>
+        <lastmod>2014-05-21T14:22:20-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://code.eklund.io/</loc>
+        <lastmod>2014-05-21T14:22:20-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://code.eklund.io/robots.txt</loc>
+        <lastmod>2014-05-21T10:07:50-04:00</lastmod>
     </url>
 </urlset>
