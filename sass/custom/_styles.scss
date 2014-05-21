@@ -26,7 +26,7 @@ to learn about modular scales.
 // variables
 // ------------------------------
 
-$accent-color: #65a672;
+$accent-color: #0056a5;
 $accent-hover-color: darken($accent-color, 8%);
 
 $text-color: #333;
@@ -306,8 +306,8 @@ nav {
   overflow: auto;
   padding: 14.637px 0;
   padding: 0.732rem 0;
-  margin-bottom: 84.715px;
-  margin-bottom: 4.236rem;
+  /*margin-bottom: 84.715px;*/
+  /*margin-bottom: 4.236rem;*/
   
   // ----- search form -----
   
@@ -558,8 +558,8 @@ article {
   
   h1 {
     @extend .font-size-largest;
-    margin-top: 62.000px;
-    margin-top: 3.1rem;
+    margin-top: 31.000px;
+    margin-top: 1.55rem;
     margin-bottom: 20px;
     margin-bottom: 1rem;
   }
