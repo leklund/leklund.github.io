@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[code.eklund.io]]></title>
-  <link href="http://code.eklund.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Postgresql | code.eklund.io]]></title>
+  <link href="http://code.eklund.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
   <updated>2014-05-27T18:07:26-04:00</updated>
   <id>http://code.eklund.io/</id>
@@ -22,15 +22,12 @@
 
 <p>If you are using Rails 4.x on Heroku and you have your schema format set to sql (which you probably should), you will see this error when running <code>heroku run rake db:migrate</code></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Aborted!
-</span><span class='line'>Error dumping database
-</span><span class='line'>.../activerecord-4.0.4/lib/active_record/tasks/postgresql_database_tasks.rb:55:in `structure_dump'
-</span><span class='line'>.../activerecord-4.0.4/lib/active_record/tasks/database_tasks.rb:143:in `structure_dump'</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+Aborted!
+Error dumping database
+.../activerecord-4.0.4/lib/active_record/tasks/postgresql_database_tasks.rb:55:in `structure_dump'
+.../activerecord-4.0.4/lib/active_record/tasks/database_tasks.rb:143:in `structure_dump'
+</code></p>
 
 <p>This is an interesting bug that, as it turns out, can be ignored.</p>
 
@@ -60,41 +57,23 @@ This means that <code>db:migrate</code> will raise an error on Heroku.</p>
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">active_record</span><span class="o">.</span><span class="n">schema_format</span> <span class="o">=</span> <span class="ss">:ruby</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><code>ruby
+config.active_record.schema_format = :ruby
+</code></p>
 
 <ul>
 <li>If for some reason you don&rsquo;t want to change the config file: add a rake task with the following to suppress the error:</li>
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span> <span class="o">==</span> <span class="s1">&#39;production&#39;</span>
-</span><span class='line'>    <span class="ss">Rake</span><span class="p">:</span><span class="ss">:Task</span><span class="o">[</span><span class="s2">&quot;db:structure:dump&quot;</span><span class="o">].</span><span class="n">clear</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>``` ruby
+if Rails.env == &lsquo;production&rsquo;</p>
 
+<pre><code>Rake::Task["db:structure:dump"].clear
+</code></pre>
 
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First Post]]></title>
-    <link href="http://code.eklund.io/blog/2014/05/21/first-post/"/>
-    <updated>2014-05-21T11:08:52-04:00</updated>
-    <id>http://code.eklund.io/blog/2014/05/21/first-post</id>
-    <content type="html"><![CDATA[<p><strong>Hello? Is this thing on?</strong></p>
-
-<p>I was testing out Octopress and decided it was time to finally start a blog. No,
-this won&rsquo;t be the realization of my imaginary blog about the art of the movie trailer.
-This will be about my experiences with Ruby, Rails, PostgreSQL, Redis, etc.
-I hope that by documenting what I have learned that I can help others along they way. Plus, as I age and
-my memory fails me I can just google for my old posts.</p>
+<p>end
+```</p>
 ]]></content>
   </entry>
   

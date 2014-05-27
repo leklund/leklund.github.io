@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>code.eklund.io</title>
+  <title>Safely Ignoring Heroku Errors on Rake Db:migrate - code.eklund.io</title>
   <meta name="author" content="Lukas Eklund">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="initial-scale=1">
 
   
-  <link rel="canonical" href="http://code.eklund.io">
+  <link rel="canonical" href="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="code.eklund.io" type="application/atom+xml">
@@ -75,15 +75,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/">Safely Ignoring Heroku Errors on Rake Db:migrate</a></h1>
+      <h1 class="entry-title">Safely Ignoring Heroku Errors on Rake Db:migrate</h1>
     
     
       <p class="meta">
@@ -110,15 +107,15 @@
 
 
         
-           | <a href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://code.eklund.io">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
+<div class="entry-content"><p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
 
 <p>If you are using Rails 4.x on Heroku and you have your schema format set to sql (which you probably should), you will see this error when running <code>heroku run rake db:migrate</code></p>
 
@@ -181,72 +178,34 @@ This means that <code>db:migrate</code> will raise an error on Heroku.</p>
 
 
 </div>
-  
-  
 
 
-    </article>
+  <footer>
+    
+      <div class="sharing">
   
   
-    <article>
+  
+</div>
+
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/21/first-post/">First Post</a></h1>
-    
-    
-      <p class="meta">
-        
+        <a class="basic-alignment left" href="/blog/2014/05/21/first-post/" title="Previous Post: first post">&laquo; first post</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-21T11:08:52-04:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/misc/'>misc</a>
-  
-</span>
-
-
-        
-           | <a href="/blog/2014/05/21/first-post/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2014/05/21/first-post/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Hello? Is this thing on?</strong></p>
-
-<p>I was testing out Octopress and decided it was time to finally start a blog. No,
-this won&rsquo;t be the realization of my imaginary blog about the art of the movie trailer.
-This will be about my experiences with Ruby, Rails, PostgreSQL, Redis, etc.
-I hope that by documenting what I have learned that I can help others along they way. Plus, as I age and
-my memory fails me I can just google for my old posts.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  
-  
+  </section>
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -280,6 +239,7 @@ my memory fails me I can just google for my old posts.</p>
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -294,7 +254,10 @@ my memory fails me I can just google for my old posts.</p>
       var disqus_shortname = 'codeeklundio';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/';
+        var disqus_url = 'http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
