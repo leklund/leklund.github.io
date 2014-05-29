@@ -125,6 +125,6 @@ Assistant Technician (05/1996 - 08/1996)
 * I'm quite skilled with SQL and have much experience with PostgreSQL, PostGIS, PL/pgSQL, PL/v8. This includes experience with large datasets (one table has over 7.5e8 rows).
   I've worked with MySQL but my preferred RDBMS is PostgreSQL.
 * My current web development stack experience is mainly Ruby on Rails (3 & 4) or Sinatra + Sequel. I've also developed using the Perl-based Catalyst framework and HTML::Mason.
-* Test framework: After a long on-again/off-again relationship with Cucumber and a torrid aaffair with rspec, I'm happily working with MiniTest and loving it.
+* Test framework: After a long on-again/off-again relationship with Cucumber and a torrid affair with rspec, I'm happily working with MiniTest and loving it.
 * I'm also well-versed in JavaScript and CSS. I can write coffeescript but I prefer pure js.
 * Some other tools in my kit: Redis, Google Maps API, Unicorn, Cloudfront + S3, nginx, Bootstrap, jQuery
