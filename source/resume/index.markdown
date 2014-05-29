@@ -21,8 +21,8 @@ Bachelors of Science in Physics (05/1997)
 ## experience
 
 #### KaBOOM! - Washington, DC
-Manager, Software Engineering (05/2012 - 01/2014)  
 Lead Software Engineer / Director Software Engineering (01/2014 - current)
+Manager, Software Engineering (05/2012 - 01/2014)  
 
 * Conceptualize, design, development, and maintain new and existing Rails-based web
 products and applications in an Agile (two-week iterations, bug-days & pair
