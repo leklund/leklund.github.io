@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Passenger | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/passenger/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-03-18T10:28:12-04:00</updated>
+  <updated>2015-03-18T10:32:30-04:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -51,6 +51,8 @@ I would recommend adding any custom configuration to another file. Just after th
 
 <pre><code>include '&lt;%= app[:root] %&gt;/config/nginx_custom_config.conf';
 </code></pre>
+
+<p>Create this file in the config directory of your app and add all of your rewrite rules and custom directives to this file.</p>
 
 <p>If you are using this to perform rewrites and you are running on Heroku, this needs to be included</p>
 
