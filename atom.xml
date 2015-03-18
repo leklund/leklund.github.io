@@ -4,7 +4,7 @@
   <title><![CDATA[code.eklund.io]]></title>
   <link href="http://code.eklund.io/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2014-08-13T10:59:27-04:00</updated>
+  <updated>2015-03-17T22:43:41-04:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Autoscaling Resque Workers on Heroku With the Platform-api Gem]]></title>
+    <link href="http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/"/>
+    <updated>2015-01-29T10:25:03-05:00</updated>
+    <id>http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api</id>
+    <content type="html"><![CDATA[<p>Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
+If you have background workers that do variable amounts of work it makes sense to scale up the number of workers as new jobs
+are queued and then scale back down as the queue clears.</p>
+
+<p>Here is how one might scale workers using <a href="https://github.com/resque/resque/blob/master/docs/HOOKS.md">resque hooks</a> and the <a href="https://github.com/heroku/platform-api">Heroku platform-api</a> gem.
+This example scales up a worker for every three pending jobs. It will scale down once the queue is empty and
+all the workers are finished. It will also scale down when the number of idling dynos is greater than 5.
+Because it is not possible to control which dynos are killed off, this assumes that your resque workers are handling TERM
+signals (and hopefully the jobs are idempotent). It is likely that the downscale could kill off working dynos so the jobs so be sure
+to handle the Resque::TermException for jobs.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># config/initializers/heroku-platform-api.rb
+</span><span class='line'>
+</span><span class='line'>$heroku = PlatformAPI.connect_oauth(ENV['HEROKU_OAUTH_TOKEN'])
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'># lib/scaled_job.rb
+</span><span class='line'>
+</span><span class='line'>require 'platform-api'
+</span><span class='line'>
+</span><span class='line'>module ScaledJob
+</span><span class='line'>  def after_enqueue_upscale(*args)
+</span><span class='line'>    worker_count = $heroku.formation.info('app-name','worker')["quantity"]
+</span><span class='line'>    job_count = Resque.info[:pending].to_i
+</span><span class='line'>    # one worker for every 3 jobs (minimum of 1)
+</span><span class='line'>    new_worker_count = ((job_count / 3) + 1).to_i
+</span><span class='line'>    if new_worker_count &gt; worker_count
+</span><span class='line'>      $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; new_worker_count})
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def after_perform_downscale
+</span><span class='line'>    worker_count = $heroku.formation.info('app-name','worker')["quantity"]
+</span><span class='line'>    working = Resque.info[:working].to_i
+</span><span class='line'>    if Resque.info[:pending].to_i == 0 && working &lt;= 1
+</span><span class='line'>        $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; 1})
+</span><span class='line'>    elsif Resque.info[:pending].to_i &lt;= 1 && ((working + 5) &lt; worker_count)
+</span><span class='line'>        new_worker_count = working + 5
+</span><span class='line'>        $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; new_worker_count})
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'># model class
+</span><span class='line'>class Foo
+</span><span class='line'>  extend ScaledJob
+</span><span class='line'>
+</span><span class='line'>  def self.perform(*args)
+</span><span class='line'>    # work it!
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Careful With Those Infelectors: A Tale of Performance Tuning Rails]]></title>
