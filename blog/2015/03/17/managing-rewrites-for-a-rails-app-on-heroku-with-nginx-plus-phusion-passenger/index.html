@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First Post - code.eklund.io</title>
+  <title>Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger - code.eklund.io</title>
   <meta name="author" content="Lukas Eklund">
 
   
-  <meta name="description" content="Hello? Is this thing on? I was testing out Octopress and decided it was time to finally start a blog. No,
-this won&rsquo;t be the realization of my &hellip;">
+  <meta name="description" content="The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
+information architecture keeps getting rejiggered. We &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ this won&rsquo;t be the realization of my &hellip;">
   <meta name="viewport" content="initial-scale=1">
 
   
-  <link rel="canonical" href="http://code.eklund.io/blog/2014/05/21/first-post">
+  <link rel="canonical" href="http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="code.eklund.io" type="application/atom+xml">
@@ -81,7 +81,7 @@ this won&rsquo;t be the realization of my &hellip;">
   
   <header>
     
-      <h1 class="entry-title">First Post</h1>
+      <h1 class="entry-title">Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger</h1>
     
     
       <p class="meta">
@@ -97,12 +97,12 @@ this won&rsquo;t be the realization of my &hellip;">
   
 
 
-<time datetime="2014-05-21T11:08:52-04:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
+<time datetime="2015-03-17T23:26:06-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2015</time>
         
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/misc/'>misc</a>
+    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/passenger/'>passenger</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rewrites/'>rewrites</a>
   
 </span>
 
@@ -116,13 +116,51 @@ this won&rsquo;t be the realization of my &hellip;">
   </header>
 
 
-<div class="entry-content"><p><strong>Hello? Is this thing on?</strong></p>
+<div class="entry-content"><p>The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
+information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
+but I always hated having a huge stack of rewrites in the application.rb configuration. Since the app
+is hosted Heroku there weren&rsquo;t really any other options until I realized that Phusion Passenger
+will now run in standalone mode on Heroku.</p>
 
-<p>I was testing out Octopress and decided it was time to finally start a blog. No,
-this won&rsquo;t be the realization of my imaginary blog about the art of the movie trailer.
-This will be about my experiences with Ruby, Rails, PostgreSQL, Redis, etc.
-I hope that by documenting what I have learned that I can help others along they way. Plus, as I age and
-my memory fails me I can just google for my old posts.</p>
+<p>It&rsquo;s quite easy to get Passenger running on Heroku: <a href="https://github.com/phusion/passenger-ruby-heroku-demo">https://github.com/phusion/passenger-ruby-heroku-demo</a></p>
+
+<p>replace the app server in your Gemfile (unicorn, thin, puma, etc) with</p>
+
+<pre><code>gem 'passenger'
+</code></pre>
+
+<p>Update your Procfile</p>
+
+<pre><code>web: bundle exec passenger start -p $PORT --max-pool-size 3
+</code></pre>
+
+<p>This works great but doesn&rsquo;t come with an obvious was to edit the nginx.conf to add rewrite rules or an include directive.
+According to the <a href="https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#advanced_configuration">advanced configuration</a> section
+of the Passenger standalone manual, we see that there is an option to pass a configuration template.</p>
+
+<p>After adding Passenger to your Gemfile and running a <code>bundle install</code> tun this from you application root directory
+to create a configuration template.</p>
+
+<pre><code>cp $(passenger-config about resourcesdir)/templates/standalone/config.erb config/nginx.conf.erb
+</code></pre>
+
+<p>You could just add rewrites to this file but because the default configuration template may change from time to time
+I would recommend adding any custom configuration to another file. Just after the <code>server {</code> line add</p>
+
+<pre><code>include '&lt;%= app[:root] %&gt;/config/nginx_custom_config.conf';
+</code></pre>
+
+<p>If you are using this to perform rewrites and you are running in Heroku, this needs to be included</p>
+
+<pre><code>port_in_redirect off;
+</code></pre>
+
+<p>Because Nginx is listening on the random port assigned by the Heroku routing layer Nginx will, by default, include this port
+number in the rewrite rules that do HTTP redirects.</p>
+
+<p>Other use cases include enforcing SSL on your app, adding HTTP basic auth to an app, and easier generation of CORS headers.
+So far I&rsquo;m loving Phusion Passenger standalone on Heroku. In a future post I plan to examine the performance and memory usage
+versus the existing Unicorn setup.</p>
 </div>
 
 
@@ -137,8 +175,8 @@ my memory fails me I can just google for my old posts.</p>
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/" title="Previous Post: Autoscaling Resque workers on Heroku with the platform-api gem">&laquo; Autoscaling Resque workers on Heroku with the platform-api gem</a>
       
-        <a class="basic-alignment right" href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/" title="Next Post: Safely ignoring Heroku errors on rake db:migrate">Safely ignoring Heroku errors on rake db:migrate &raquo;</a>
       
     </p>
   </footer>
@@ -213,8 +251,8 @@ my memory fails me I can just google for my old posts.</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://code.eklund.io/blog/2014/05/21/first-post/';
-        var disqus_url = 'http://code.eklund.io/blog/2014/05/21/first-post/';
+        var disqus_identifier = 'http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/';
+        var disqus_url = 'http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/';
         var disqus_script = 'embed.js';
       
     (function () {

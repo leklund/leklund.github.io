@@ -9,8 +9,8 @@
   <meta name="author" content="Lukas Eklund">
 
   
-  <meta name="description" content="Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
-If you have &hellip;">
+  <meta name="description" content="The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
+information architecture keeps getting rejiggered. We &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,98 @@ If you have &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/">Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-17T23:26:06-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2015</time>
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/passenger/'>passenger</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rewrites/'>rewrites</a>
+  
+</span>
+
+
+        
+           | <a href="/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/#disqus_thread"
+             data-disqus-identifier="http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
+information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
+but I always hated having a huge stack of rewrites in the application.rb configuration. Since the app
+is hosted Heroku there weren&rsquo;t really any other options until I realized that Phusion Passenger
+will now run in standalone mode on Heroku.</p>
+
+<p>It&rsquo;s quite easy to get Passenger running on Heroku: <a href="https://github.com/phusion/passenger-ruby-heroku-demo">https://github.com/phusion/passenger-ruby-heroku-demo</a></p>
+
+<p>replace the app server in your Gemfile (unicorn, thin, puma, etc) with</p>
+
+<pre><code>gem 'passenger'
+</code></pre>
+
+<p>Update your Procfile</p>
+
+<pre><code>web: bundle exec passenger start -p $PORT --max-pool-size 3
+</code></pre>
+
+<p>This works great but doesn&rsquo;t come with an obvious was to edit the nginx.conf to add rewrite rules or an include directive.
+According to the <a href="https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#advanced_configuration">advanced configuration</a> section
+of the Passenger standalone manual, we see that there is an option to pass a configuration template.</p>
+
+<p>After adding Passenger to your Gemfile and running a <code>bundle install</code> tun this from you application root directory
+to create a configuration template.</p>
+
+<pre><code>cp $(passenger-config about resourcesdir)/templates/standalone/config.erb config/nginx.conf.erb
+</code></pre>
+
+<p>You could just add rewrites to this file but because the default configuration template may change from time to time
+I would recommend adding any custom configuration to another file. Just after the <code>server {</code> line add</p>
+
+<pre><code>include '&lt;%= app[:root] %&gt;/config/nginx_custom_config.conf';
+</code></pre>
+
+<p>If you are using this to perform rewrites and you are running in Heroku, this needs to be included</p>
+
+<pre><code>port_in_redirect off;
+</code></pre>
+
+<p>Because Nginx is listening on the random port assigned by the Heroku routing layer Nginx will, by default, include this port
+number in the rewrite rules that do HTTP redirects.</p>
+
+<p>Other use cases include enforcing SSL on your app, adding HTTP basic auth to an app, and easier generation of CORS headers.
+So far I&rsquo;m loving Phusion Passenger standalone on Heroku. In a future post I plan to examine the performance and memory usage
+versus the existing Unicorn setup.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -526,6 +618,10 @@ my memory fails me I can just google for my old posts.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/">Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/">Autoscaling Resque Workers on Heroku With the Platform-api Gem</a>
