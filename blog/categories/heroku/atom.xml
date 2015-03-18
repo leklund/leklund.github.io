@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-03-18T00:00:58-04:00</updated>
+  <updated>2015-03-18T10:28:12-04:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -52,13 +52,15 @@ I would recommend adding any custom configuration to another file. Just after th
 <pre><code>include '&lt;%= app[:root] %&gt;/config/nginx_custom_config.conf';
 </code></pre>
 
-<p>If you are using this to perform rewrites and you are running in Heroku, this needs to be included</p>
+<p>If you are using this to perform rewrites and you are running on Heroku, this needs to be included</p>
 
-<pre><code>port_in_redirect off;
+<pre><code>&lt;% if app[:environment] != 'development' %&gt;
+  port_in_redirect off;
+&lt;% end %&gt;
 </code></pre>
 
 <p>Because Nginx is listening on the random port assigned by the Heroku routing layer Nginx will, by default, include this port
-number in the rewrite rules that do HTTP redirects.</p>
+number in the rewrite rules that do HTTP redirects. The conditional makes sure that when running on localhost:5000 redirects still work as intended in your development environment.</p>
 
 <p>Other use cases include enforcing SSL on your app, adding HTTP basic auth to an app, and easier generation of CORS headers.
 So far I&rsquo;m loving Phusion Passenger standalone on Heroku. In a future post I plan to examine the performance and memory usage
