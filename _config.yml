@@ -7,7 +7,8 @@ title: code.eklund.io
 subtitle: space age technobabble for an electromatic boogaloo
 author: Lukas Eklund
 simple_search: https://www.google.com/search
-description:
+description: musings on code, work, raising kids, and the meaning of life, the universe, and everything.
+keywords: ruby, 42, rails, postgresql, heroku, postgis
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in

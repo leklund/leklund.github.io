@@ -4,6 +4,8 @@ title: "Safely ignoring Heroku errors on rake db:migrate"
 date: 2014-05-27 17:37:30 -0400
 comments: true
 categories: [heroku, postgresql, rails]
+keywords: heroku,postgresql,rails,database,structure,schema,active record
+description: "Running rake db:migrate on heroku throws an error but it can be ignored or squelched becasue the migrations actually run."
 ---
 (Repurposing my answer to this [stackoverflow question](http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077) as a blog post)
 

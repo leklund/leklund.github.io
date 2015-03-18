@@ -3,7 +3,9 @@ layout: post
 title: "Autoscaling Resque workers on Heroku with the platform-api gem"
 date: 2015-01-29 11:25:03 -0400
 comments: true
-categories: [resque, rails, heroku, papertrail]
+categories: [resque, rails, heroku]
+keywords: scaling,resque,rails,ruby,workers,jobs
+description: "Autoscaling Resque workers on Heroku with the platform-api gem"
 ---
 
 Heroku is a great service and is extremely powerful. It's also not cheap so leaving workers idling can cost you a lot of money.

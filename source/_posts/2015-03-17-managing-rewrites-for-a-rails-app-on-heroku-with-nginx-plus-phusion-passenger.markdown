@@ -4,6 +4,8 @@ title: "Managing rewrites for a Rails app on Heroku with Nginx + Phusion Passeng
 date: 2015-03-17 23:26:06 -0400
 comments: true
 categories: [rails, nginx, passenger, rewrites, heroku]
+keywords: rails,nginx,passenger,rewrites,heroku,how-to,phusion,port,redirect
+description: "Use nginx running as part of Phusion Passenger standalone to manage rewrite rules and redirects for Rails apps running on Heroku"
 ---
 The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
 information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
@@ -34,6 +36,8 @@ You could just add rewrites to this file but because the default configuration t
 I would recommend adding any custom configuration to another file. Just after the ```server {``` line add
 
     include '<%= app[:root] %>/config/nginx_custom_config.conf';
+
+Create this file in the config directory of your app and add all of your rewrite rules and custom directives to this file.
 
 If you are using this to perform rewrites and you are running on Heroku, this needs to be included
 

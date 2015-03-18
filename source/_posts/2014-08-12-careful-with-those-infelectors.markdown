@@ -4,6 +4,8 @@ title: "Careful with those inflectors: a tale of performance tuning rails"
 date: 2014-08-12 16:48:19 -0400
 comments: true
 categories: [rails, newrelic, profiling, performance]
+keywords: rails,newrelic,ruby,inflectors,profiling,performance,speed
+description: "Using NewRelic profiling tools to track down bottlenecks in a rails application"
 ---
 We run our website at kaboom.org on a custom-built Rails 4-based CMS and for a long
 time I was unhappy with performance of the site. Not that it wasn't responsive and
