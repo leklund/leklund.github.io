@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Careful with those infelectors: a tale of performance tuning rails"
+title: "Careful with those inflectors: a tale of performance tuning rails"
 date: 2014-08-12 16:48:19 -0400
 comments: true
 categories: [rails, newrelic, profiling, performance]
