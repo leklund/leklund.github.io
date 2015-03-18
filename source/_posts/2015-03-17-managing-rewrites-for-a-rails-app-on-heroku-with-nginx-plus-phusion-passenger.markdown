@@ -35,12 +35,14 @@ I would recommend adding any custom configuration to another file. Just after th
 
     include '<%= app[:root] %>/config/nginx_custom_config.conf';
 
-If you are using this to perform rewrites and you are running in Heroku, this needs to be included
+If you are using this to perform rewrites and you are running on Heroku, this needs to be included
 
-    port_in_redirect off;
+    <% if app[:environment] != 'development' %>
+      port_in_redirect off;
+    <% end %>
 
 Because Nginx is listening on the random port assigned by the Heroku routing layer Nginx will, by default, include this port
-number in the rewrite rules that do HTTP redirects.
+number in the rewrite rules that do HTTP redirects. The conditional makes sure that when running on localhost:5000 redirects still work as intended in your development environment.
 
 Other use cases include enforcing SSL on your app, adding HTTP basic auth to an app, and easier generation of CORS headers.
 So far I'm loving Phusion Passenger standalone on Heroku. In a future post I plan to examine the performance and memory usage
