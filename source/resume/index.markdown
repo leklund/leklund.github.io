@@ -8,27 +8,41 @@ footer: false
 ---
 
 # Lukas C. Eklund
-<lukas@eklund.io>  
-8321 16th Street, Silver Spring, MD 20910  
+<lukas@eklund.io>
+8321 16th Street, Silver Spring, MD 20910
 240.601.2974
+<a href="https://github.com/leklund"><i class="fa fa-github"></i></a>
+<a href="https://twitter.com/lukas42"><i class="fa fa-twitter"></i></a>
+<a href="http://stackoverflow.com/users/601688/lukas-eklund"><i class="fa fa-stack-overflow"></i></a>
+<a href="http://www.linkedin.com/in/lukaseklund"><i class="fa fa-linkedin"></i></a>
+
 
 * * *
 
-## education
-Bachelors of Science in Physics (05/1997)  
-***North Park College***, Chicago, Illinois
+## summary
+I am a Senior Software Developer with 9 years of solid experience with Ruby,
+PostgreSQL, Javascript, Perl and a host of other technologies. My experience
+covers the full stack of software development from the server layer, data
+model, application layer, to the user interface. I'm passionate
+about building well-tested, quality software.
+
+The first piece of software I ever wrote, in the sixth grade, was a graphical
+adventure game set in the age of dinosaurs written in Applesoft BASIC. These
+days I get excited about building scalable RESTful API's and responsive web
+applications in Rails (and I still like dinosaurs).
+
 
 ## experience
 
 #### KaBOOM! - Washington, DC
 Lead Software Engineer / Director Software Engineering (01/2014 - current)
-Manager, Software Engineering (05/2012 - 01/2014)  
+Manager, Software Engineering (05/2012 - 01/2014)
 
 * Conceptualize, design, development, and maintain new and existing Rails-based web
 products and applications in an Agile (two-week iterations, bug-days & pair
 programming) environment.
 * Manage PostgreSQL databases and provide query support for reporting and data analysis.
-* Work with a GIS manager to support mapping intitiatives and implement data-based workflows in PostGIS.
+* Work with a GIS manager to support mapping initiatives and implement data-based work-flows in PostGIS.
 * Maintain and support the back-end infrastructure running on Heroku and Heroku Postgres.
 * Manage a small team of developers to be a constructive, productive, well-oiled machine.
 
@@ -38,11 +52,12 @@ _Specific accomplishments_:
 * Migrated existing Drupal data from MySQL to new custom PostgreSQL-based CMS.
 * Moved rails applications off of Rackspaca and Slicehost and on to the Heroku platform.
 * Migrated 3 legacy MySQL databases to a single multi-schema PostgreSQL database
+* Converted map data to PostGIS tables utilizing table inheritance to provide multiple geometries per record.
 
 #### Vetstreet (VCA Antech) - Silver Spring, MD
 Senior Application Developer (08/2011 - 05/2012)
 
-* Lead development of large scale marketing campaigns using Perl, SQL, PL/pgSQL.
+* Lead development of large scale marketing campaigns using Perl, Java, SQL, PL/pgSQL.
 * Optimize campaigns to run efficiently and quickly against a massive dataset.
 * Design, test, and build Sinatra applications to provide functionality that may not
 require the full Rails stack.
@@ -104,27 +119,21 @@ Electronic Publications Manager (12/1998 - 08/2001)
 * Developed unified strategy for the University's web publications
 * Developed, maintained, and updated all sections of the University website
 
-#### Fraterrigo, Beranek, Feiereisel & Kasbohm - Chicago, Illinois
-Legal Secretary / Law Clerk (09/1997 - 11/1998)
-
-* Prepared correspondence, court documents, and memoranda
-* Managed case files for three attorneys
-* Filed documents with the court and performed legal research
-
-#### Kaman Sciences Corporation - Colorado Springs, Colorado
-Assistant Technician (05/1996 - 08/1996)
-
-* Assisted in the installation of computer network systems
-* Designed and prototyped a device to switch workstations between multiple separate secure networks
-
 ## skills and tools
 
-* I'm an efficient problem solver and skilled at troubleshooting. I'm also a self-starter and a fast learner -- I love learning new technologies and methodologies.
-* Highly proficient in Ruby and Perl. I have some experience with Python and can read Java which I have done when developing in jRuby. I also have some PHP experience but would be happy if I never had to see it ever again.
-* Editor of choice: vim.
+* Highly proficient in Ruby, Javascript, and Perl. I have some experience with Python and Java as well. 
 * I'm quite skilled with SQL and have much experience with PostgreSQL, PostGIS, PL/pgSQL, PL/v8. This includes experience with large datasets (one table has over 7.5e8 rows).
   I've worked with MySQL but my preferred RDBMS is PostgreSQL.
+* Editor of choice: vim.
 * My current web development stack experience is mainly Ruby on Rails (3 & 4) or Sinatra + Sequel. I've also developed using the Perl-based Catalyst framework and HTML::Mason.
-* Test framework: After a long on-again/off-again relationship with Cucumber and a torrid affair with rspec, I'm happily working with MiniTest and loving it.
-* I'm also well-versed in JavaScript and CSS. I can write coffeescript but I prefer pure js.
-* Some other tools in my kit: Redis, Google Maps API, Unicorn, Cloudfront + S3, nginx, Bootstrap, jQuery
+* Test framework: MiniTest because it's so simple but I am beginning to lean towards rspec because it's so much more readable.
+* I'm also well-versed in JavaScript, CSS, and HTML. This includes working with coffescript and Sass/SCSS.
+* Strong unix knowlegde -- I'm feel at home when given a bash prompt.
+* Experienced with AWS services including S3, Cloudfront, EC2, ELB, RDS
+* Some other tools in my kit: Redis, Google Maps API, Mapbox, Unicorn, Passenger, nginx, Bootstrap, jQuery, bash
+* I'm an efficient problem solver and skilled at troubleshooting. I'm also a self-starter and a fast learner -- I love learning new technologies and methodologies and have begun learning Scala and Clojure to really wrap my head around functional programming.
+
+## education
+Bachelors of Science in Physics (05/1997)
+***North Park College***, Chicago, Illinois
+
