@@ -4,7 +4,7 @@
   <title><![CDATA[code.eklund.io]]></title>
   <link href="http://code.eklund.io/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-03-24T17:56:20-04:00</updated>
+  <updated>2015-04-28T17:22:28-04:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Modeling Adjacency Lists in Ruby]]></title>
+    <link href="http://code.eklund.io/blog/2015/04/03/modeling-adjacency-lists-in-ruby/"/>
+    <updated>2015-04-03T00:00:00-04:00</updated>
+    <id>http://code.eklund.io/blog/2015/04/03/modeling-adjacency-lists-in-ruby</id>
+    <content type="html"><![CDATA[<p>Normally, this would be a task I would try to keep in my data layer
+since PostgreSQL is so great at doing this with recursive queries. However,
+sometimes you just need to operate in Ruby and Ruby alone. Let&rsquo;s say I want to model
+what I always call an adjacency list but what is more technically a a directed graph.
+We have a set of nodes where any given node can have a parent node:</p>
+
+<pre><code>1
+</code></pre>
+
+<p>   / \
+  2   3</p>
+
+<pre><code> / \
+4   5
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger]]></title>
