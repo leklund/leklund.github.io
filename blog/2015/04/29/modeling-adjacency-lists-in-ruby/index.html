@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>code.eklund.io</title>
+  <title>Modeling Adjacency Lists in Ruby - code.eklund.io</title>
   <meta name="author" content="Lukas Eklund">
 
   
-  <meta name="description" content="musings on code, work, raising kids, and the meaning of life, the universe, and everything.">
-  <meta name="keywords" content="ruby, 42, rails, postgresql, heroku, postgis">
+  <meta name="description" content="Classes to model adjacency lists in ruby">
+  <meta name="keywords" content="ruby,lists,trees,graphs">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="initial-scale=1">
 
   
-  <link rel="canonical" href="http://code.eklund.io">
+  <link rel="canonical" href="http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="code.eklund.io" type="application/atom+xml">
@@ -75,15 +75,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/04/29/modeling-adjacency-lists-in-ruby/">Modeling Adjacency Lists in Ruby</a></h1>
+      <h1 class="entry-title">Modeling Adjacency Lists in Ruby</h1>
     
     
       <p class="meta">
@@ -110,15 +107,15 @@
 
 
         
-           | <a href="/blog/2015/04/29/modeling-adjacency-lists-in-ruby/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby/">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://code.eklund.io">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Normally, this would be a task I would try to keep in my data layer
+<div class="entry-content"><p>Normally, this would be a task I would try to keep in my data layer
 since PostgreSQL is so great at doing this with recursive queries. However,
 sometimes you just need to operate in Ruby and Ruby alone. Let&rsquo;s say I want to model
 what I always call an adjacency list but what is more technically a a directed graph.
@@ -329,550 +326,34 @@ or other data structure.</p>
 
 <p><a href="https://gist.github.com/leklund/f1fb60ea820720463938">Complete code gist.</a></p>
 </div>
-  
-  
 
 
-    </article>
+  <footer>
+    
+      <div class="sharing">
   
   
-    <article>
+  
+</div>
+
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/">Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-17T23:26:06-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2015</time>
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/passenger/'>passenger</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rewrites/'>rewrites</a>
-  
-</span>
-
-
-        
-           | <a href="/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
-information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
-but I always hated having a huge stack of rewrites in the application.rb configuration. Since the app
-is hosted Heroku there weren&rsquo;t really any other options until I realized that Phusion Passenger
-will now run in standalone mode on Heroku.</p>
-
-<p>It&rsquo;s quite easy to get Passenger running on Heroku: <a href="https://github.com/phusion/passenger-ruby-heroku-demo">https://github.com/phusion/passenger-ruby-heroku-demo</a></p>
-
-<p>replace the app server in your Gemfile (unicorn, thin, puma, etc) with</p>
-
-<pre><code>gem 'passenger'
-</code></pre>
-
-<p>Update your Procfile</p>
-
-<pre><code>web: bundle exec passenger start -p $PORT --max-pool-size 3
-</code></pre>
-
-<p>This works great but doesn&rsquo;t come with an obvious was to edit the nginx.conf to add rewrite rules or an include directive.
-According to the <a href="https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#advanced_configuration">advanced configuration</a> section
-of the Passenger standalone manual, we see that there is an option to pass a configuration template.</p>
-
-<p>After adding Passenger to your Gemfile and running a <code>bundle install</code> tun this from you application root directory
-to create a configuration template.</p>
-
-<pre><code>cp $(passenger-config about resourcesdir)/templates/standalone/config.erb config/nginx.conf.erb
-</code></pre>
-
-<p>You could just add rewrites to this file but because the default configuration template may change from time to time
-I would recommend adding any custom configuration to another file. Just after the <code>server {</code> line add</p>
-
-<pre><code>include '&lt;%= app[:root] %&gt;/config/nginx_custom_config.conf';
-</code></pre>
-
-<p>Create this file in the config directory of your app and add all of your rewrite rules and custom directives to this file.</p>
-
-<p>If you are using this to perform rewrites and you are running on Heroku, this needs to be included</p>
-
-<pre><code>&lt;% if app[:environment] != 'development' %&gt;
-  port_in_redirect off;
-&lt;% end %&gt;
-</code></pre>
-
-<p>Because Nginx is listening on the random port assigned by the Heroku routing layer Nginx will, by default, include this port
-number in the rewrite rules that do HTTP redirects. The conditional makes sure that when running on localhost:5000 redirects still work as intended in your development environment.</p>
-
-<p>Other use cases include enforcing SSL on your app, adding HTTP basic auth to an app, and easier generation of CORS headers.
-So far I&rsquo;m loving Phusion Passenger standalone on Heroku. In a future post I plan to examine the performance and memory usage
-versus the existing Unicorn setup.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+        <a class="basic-alignment left" href="/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/" title="Previous Post: Managing rewrites for a Rails app on Heroku with Nginx + Phusion Passenger">&laquo; Managing rewrites for a Rails app on Heroku with Nginx + Phusion Passenger</a>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/">Autoscaling Resque Workers on Heroku With the Platform-api Gem</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-29T10:25:03-05:00" pubdate data-updated="true">Jan 29<span>th</span>, 2015</time>
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/resque/'>resque</a>
-  
-</span>
-
-
-        
-           | <a href="/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
-If you have background workers that do variable amounts of work it makes sense to scale up the number of workers as new jobs
-are queued and then scale back down as the queue clears.</p>
-
-<p>Here is how one might scale workers using <a href="https://github.com/resque/resque/blob/master/docs/HOOKS.md">resque hooks</a> and the <a href="https://github.com/heroku/platform-api">Heroku platform-api</a> gem.
-This example scales up a worker for every three pending jobs. It will scale down once the queue is empty and
-all the workers are finished. It will also scale down when the number of idling dynos is greater than 5.
-Because it is not possible to control which dynos are killed off, this assumes that your resque workers are handling TERM
-signals (and hopefully the jobs are idempotent). It is likely that the downscale could kill off working dynos so the jobs so be sure
-to handle the Resque::TermException for jobs.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># config/initializers/heroku-platform-api.rb
-</span><span class='line'>
-</span><span class='line'>$heroku = PlatformAPI.connect_oauth(ENV['HEROKU_OAUTH_TOKEN'])
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'># lib/scaled_job.rb
-</span><span class='line'>
-</span><span class='line'>require 'platform-api'
-</span><span class='line'>
-</span><span class='line'>module ScaledJob
-</span><span class='line'>  def after_enqueue_upscale(*args)
-</span><span class='line'>    worker_count = $heroku.formation.info('app-name','worker')["quantity"]
-</span><span class='line'>    job_count = Resque.info[:pending].to_i
-</span><span class='line'>    # one worker for every 3 jobs (minimum of 1)
-</span><span class='line'>    new_worker_count = ((job_count / 3) + 1).to_i
-</span><span class='line'>    if new_worker_count &gt; worker_count
-</span><span class='line'>      $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; new_worker_count})
-</span><span class='line'>    end
-</span><span class='line'>  end
-</span><span class='line'>
-</span><span class='line'>  def after_perform_downscale
-</span><span class='line'>    worker_count = $heroku.formation.info('app-name','worker')["quantity"]
-</span><span class='line'>    working = Resque.info[:working].to_i
-</span><span class='line'>    if Resque.info[:pending].to_i == 0 && working &lt;= 1
-</span><span class='line'>        $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; 1})
-</span><span class='line'>    elsif Resque.info[:pending].to_i &lt;= 1 && ((working + 5) &lt; worker_count)
-</span><span class='line'>        new_worker_count = working + 5
-</span><span class='line'>        $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; new_worker_count})
-</span><span class='line'>    end
-</span><span class='line'>  end
-</span><span class='line'>end
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'># model class
-</span><span class='line'>class Foo
-</span><span class='line'>  extend ScaledJob
-</span><span class='line'>
-</span><span class='line'>  def self.perform(*args)
-</span><span class='line'>    # work it!
-</span><span class='line'>  end
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/12/careful-with-those-infelectors/">Careful With Those Inflectors: A Tale of Performance Tuning Rails</a></h1>
-    
-    
-      <p class="meta">
-        
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-12T16:48:19-04:00" pubdate data-updated="true">Aug 12<span>th</span>, 2014</time>
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/newrelic/'>newrelic</a>, <a class='category' href='/blog/categories/performance/'>performance</a>, <a class='category' href='/blog/categories/profiling/'>profiling</a>, <a class='category' href='/blog/categories/rails/'>rails</a>
-  
-</span>
-
-
-        
-           | <a href="/blog/2014/08/12/careful-with-those-infelectors/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2014/08/12/careful-with-those-infelectors/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We run our website at kaboom.org on a custom-built Rails 4-based CMS and for a long
-time I was unhappy with performance of the site. Not that it wasn&rsquo;t responsive and
-a huge (and I mean HUGE) improvement over the previous drupal mess, but requests
-were spending more time than seemed necessary just in the ruby layer. Most requests were spending
-almost 500ms there according to NewRelic traces.</p>
-
-<p>I installed some tools locally to help track down where and why it was spending
-so much time each request. The gem <a href="https://github.com/MiniProfiler/rack-mini-profiler">rack-mini-profiler</a> got me started and it is
-a great way to get data on each and every request.
-This helped me track down some code that was dynamically creating <code>store_accessors</code> for every request. There is an easy way to check if a
-given <code>stored_attribute</code> exists on a class:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.stored_attributes[:options].include?("some_attribute")</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Implementing this check and only adding the store_accessors when needed
-provided a small performance increase but each request was still spending way
-too much time in ruby. I spent some time trying to get usable data from
-flamegraphs and also experimented with adding &lsquo;step&rsquo; blocks in my code to help
-track down where things were slow. The problem I found with rack-mini-profiler
-was that the rails stack is so deep it makes it very hard to see exacty where
-the problems are. I still have it installed on a local branch that and I find
-it very useful in some cases. But for this issue, it left me digging through a
-convoluted flame graph and I decided to move on.</p>
-
-<p>It was at this point I took a few weeks off from profiling and also took a
-vacation. Several weeks later I was preparing for a bug day and was getting
-error traces from New Relic to add to Trello that I revisited the performance
-issues.  We are on Heroku so I decided to switch our free New Relic plan to the
-plan the provides the paid-level features for a limited number of dynos. What
-this gave me was access to my new favorite profiling tool: the New Relic thread
-profiler. I ran the tool for a 5 minute trace and this was the result:</p>
-
-<p><img class="center" src="/images/blog/newrelicprof.png"></p>
-
-<p>I had to uncollapse a few parts of the tree but it&rsquo;s pretty clear that the
-request was spending over 56% of the time in the name method on the
-ContentField model. Which, as it turns out, was a method that was no longer
-even needed.
-The offending, extraneous code:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">name</span>
-</span><span class='line'>  <span class="k">return</span> <span class="k">super</span> <span class="k">if</span> <span class="k">super</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="k">super</span><span class="o">.</span><span class="n">blank?</span>
-</span><span class='line'>  <span class="k">super</span><span class="o">.</span><span class="n">downcase</span><span class="o">.</span><span class="n">parameterize</span><span class="o">.</span><span class="n">underscore</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I think this was added in the initial phases of building our CMS to ensure
-conformity with seeded names alongside imported field names from Drupal. The
-drupal importer I wrote handled all the transformations and there are
-validations so enure that field names are created properly. This method does
-nothing at all except run downcase, parameterize, and underscore on strings
-that already conform to that format. And, as it turns out, <em>inflectors don&rsquo;t
-come cheap</em>. I removed the method, ran my tests, and deployed a new version of
-the CMS. The performance increase was noticable immediately:</p>
-
-<p><img class="center" src="/images/blog/transaction_performance.png"></p>
-
-<p>It&rsquo;s not everyday that removing 4 lines of code (well, it was really just one) can give you such a boost in performance. Lessons learned:</p>
-
-<ol>
-<li>Careful with those inflectors! They can end up being performance bottlenecks.</li>
-<li>Just because it was cached in memcache doesn&rsquo;t mean the object initialization doesn&rsquo;t incur the same cost.</li>
-<li>NewRelic thread profiling is pretty awesome</li>
-<li>rack-mini-profiler combined with flame graphs is an incredible tool that I need to spend more time learning how to use properly.</li>
-<li>Careful with adding dynamic stored attributes with an after_initialize. They get added as class methods so only need to be added once.</li>
-</ol>
-
-
-<p>Helpful links:</p>
-
-<ul>
-<li><a href="http://samsaffron.com/archive/2012/07/12/miniprofiler-ruby-edition">miniprofiler ruby edition</a></li>
-<li><a href="http://samsaffron.com/archive/2013/03/19/flame-graphs-in-ruby-miniprofiler">Flame graphs in Ruby MiniProfiler</a></li>
-<li><a href="https://docs.newrelic.com/docs/apm/applications-menu/events/thread-profiler-dashboard">New Relic Thread Profiler docs</a></li>
-</ul>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/">Safely Ignoring Heroku Errors on Rake Db:migrate</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-27T17:37:30-04:00" pubdate data-updated="true">May 27<span>th</span>, 2014</time>
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>, <a class='category' href='/blog/categories/rails/'>rails</a>
-  
-</span>
-
-
-        
-           | <a href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
-
-<p>If you are using Rails 4.x on Heroku and you have your schema format set to sql (which you probably should), you will see this error when running <code>heroku run rake db:migrate</code></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Aborted!
-</span><span class='line'>Error dumping database
-</span><span class='line'>.../activerecord-4.0.4/lib/active_record/tasks/postgresql_database_tasks.rb:55:in `structure_dump'
-</span><span class='line'>.../activerecord-4.0.4/lib/active_record/tasks/database_tasks.rb:143:in `structure_dump'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is an interesting bug that, as it turns out, can be ignored.</p>
-
-<p>ActiveRecord will only run the task <code>db:structure:dump</code> if you are using &lsquo;sql&rsquo; as
-your <code>active_record.schema_format</code>.  And that rake task (<code>db:structure:dump</code>) will
-fail on Heroku because the executable <code>pg_dump</code> is (unsurprisingly) not in the
-binary path.  Interestingly enough, Heroku states that <code>db:schema:dump</code> is not
-supported but if you set the schema format to ruby, it works fine. Of course,
-you would end up with a <code>schema.rb</code> file on one-off dyno that will not exist
-shortly after the rake task finished running.</p>
-
-<p>In Rails 3, the dump task would only raise an error is the exit code of the
-command was 1. On unix based systems if a command is not found, the exit code
-is 127.  So even if the <code>pg_dump</code> command fails on Rails 3 (which it does), it
-won&rsquo;t raise an error and it won&rsquo;t halt the rake task. So anyone using a sql
-schema format with Rails 3 wouldn&rsquo;t have this issue because it would fail
-silently. The code was refactored in Rails 4 to properly raise an error if the dump failed.
-This means that <code>db:migrate</code> will raise an error on Heroku.</p>
-
-<p><strong>However, even though it errors with rake aborted the DDL from the migration is actually executed and committed.</strong></p>
-
-<p>Here are some possible solutions (if the error really bothers you):</p>
-
-<ul>
-<li>Ignore the error as the migrations are actually running.</li>
-<li>Since you don&rsquo;t care about the structure dump on production, set the schema_format to ruby. In config/environments/production.rb:</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">active_record</span><span class="o">.</span><span class="n">schema_format</span> <span class="o">=</span> <span class="ss">:ruby</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>If for some reason you don&rsquo;t want to change the config file: add a rake task with the following to suppress the error:</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span> <span class="o">==</span> <span class="s1">&#39;production&#39;</span>
-</span><span class='line'>    <span class="ss">Rake</span><span class="p">:</span><span class="ss">:Task</span><span class="o">[</span><span class="s2">&quot;db:structure:dump&quot;</span><span class="o">].</span><span class="n">clear</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/21/first-post/">First Post</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-21T11:08:52-04:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
-        
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/misc/'>misc</a>
-  
-</span>
-
-
-        
-           | <a href="/blog/2014/05/21/first-post/#disqus_thread"
-             data-disqus-identifier="http://code.eklund.io/blog/2014/05/21/first-post/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Hello? Is this thing on?</strong></p>
-
-<p>I was testing out Octopress and decided it was time to finally start a blog. No,
-this won&rsquo;t be the realization of my imaginary blog about the art of the movie trailer.
-This will be about my experiences with Ruby, Rails, PostgreSQL, Redis, etc.
-I hope that by documenting what I have learned that I can help others along they way. Plus, as I age and
-my memory fails me I can just google for my old posts.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -918,6 +399,7 @@ my memory fails me I can just google for my old posts.</p>
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -932,7 +414,10 @@ my memory fails me I can just google for my old posts.</p>
       var disqus_shortname = 'codeeklundio';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby/';
+        var disqus_url = 'http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
