@@ -9,7 +9,7 @@ footer: false
 
 # Lukas C. Eklund
 <lukas@eklund.io>
-8321 16th Street, Silver Spring, MD 20910
+419 Jean Street, Madison, WI 53703
 240.601.2974
 <a href="https://github.com/leklund"><i class="fa fa-github"></i></a>
 <a href="https://twitter.com/lukas42"><i class="fa fa-twitter"></i></a>
@@ -20,8 +20,8 @@ footer: false
 * * *
 
 ## summary
-I am a Senior Software Developer with 9 years of solid experience with Ruby,
-PostgreSQL, Javascript, Perl and a host of other technologies. My experience
+I am a Senior Software Developer with 10 years of solid experience with Ruby,
+PostgreSQL, MySQL, Javascript, Perl and a host of other technologies. My experience
 covers the full stack of software development from the server layer, data
 model, application layer, to the user interface. I'm passionate
 about building well-tested, quality software.
@@ -34,8 +34,15 @@ applications in Rails (and I still like dinosaurs).
 
 ## experience
 
+#### Fastly - San Francisco, CA (remote)
+Principal Engineer (7/2016 - current)
+Software Engineer (7/2015 - 7/2016)
+
+* Design, build, and update Ruby applications to support external APIs
+* Work with corss-functional teams to deliver features to customers
+
 #### KaBOOM! - Washington, DC
-Lead Software Engineer / Director Software Engineering (01/2014 - current)
+Lead Software Engineer / Director Software Engineering (01/2014 - 6/2015)
 Manager, Software Engineering (05/2012 - 01/2014)
 
 * Conceptualize, design, development, and maintain new and existing Rails-based web
@@ -74,7 +81,7 @@ _Specific accomplishments_:
 
 
 #### Media Matters for America - Washington, DC
-Senior Systems Developer (04/2011 - 08/2011)  
+Senior Systems Developer (04/2011 - 08/2011)
 Systems Developer (05/2007 - 08/2011)
 
 * Develop, test, deploy, and maintain web-based applications for research, analysis, video processing and archiving usy Ruby on Rails and Perl-based frameworks.
@@ -121,7 +128,7 @@ Electronic Publications Manager (12/1998 - 08/2001)
 
 ## skills and tools
 
-* Highly proficient in Ruby, Javascript, and Perl. I have some experience with Python and Java as well. 
+* Highly proficient in Ruby, Javascript, and Perl. I have some experience with Python and Java as well.
 * I'm quite skilled with SQL and have much experience with PostgreSQL, PostGIS, PL/pgSQL, PL/v8. This includes experience with large datasets (one table has over 7.5e8 rows).
   I've worked with MySQL but my preferred RDBMS is PostgreSQL.
 * Editor of choice: vim.
