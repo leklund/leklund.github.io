@@ -11,17 +11,18 @@ Using envdir to manage environment variables for a Ruby app means that rake task
 Capistrano can fail or have unexpected output because the ENV hash won't be populated with
 what is located in the envdir.
 
-#### What is `envdir`?
+__What is `envdir`?__
 
 https://cr.yp.to/daemontools/envdir.html
 
 > `envdir` runs another program with environment modified according to files in a specified directory.
 
-#### Why not use `dotenv`?
+__Why not use `dotenv`?__
 
-`dotenv` isn't meant for production and `envdir` integrate nicely with `runit`.
+`dotenv` isn't meant for production and `envdir` integrates nicely with `runit`. And if that's how your
+SRE team wants to manage apps themn that's what you use.
 
-#### So how can I fix it?
+__So how can I fix it?__
 
 Add to the rake command prefix in SSHKit.
 
