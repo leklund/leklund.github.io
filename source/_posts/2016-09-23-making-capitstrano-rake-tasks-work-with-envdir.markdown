@@ -20,7 +20,7 @@ https://cr.yp.to/daemontools/envdir.html
 __Why not use `dotenv`?__
 
 `dotenv` isn't meant for production and `envdir` integrates nicely with `runit`. And if that's how your
-SRE team wants to manage apps themn that's what you use.
+SRE team wants to manage apps then that's what you use.
 
 __So how can I fix it?__
 
