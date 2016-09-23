@@ -4,7 +4,7 @@
   <title><![CDATA[code.eklund.io]]></title>
   <link href="http://code.eklund.io/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-04-29T11:10:12-04:00</updated>
+  <updated>2016-09-23T13:57:37-05:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -14,9 +14,90 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Making Capistrano Rake Tasks Work With Envdir]]></title>
+    <link href="http://code.eklund.io/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/"/>
+    <updated>2016-09-23T13:10:48-05:00</updated>
+    <id>http://code.eklund.io/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir</id>
+    <content type="html"><![CDATA[<p>Using envdir to manage environment variables for a Ruby app means that rake tasks run via
+Capistrano can fail or have unexpected output because the ENV hash won&rsquo;t be populated with
+what is located in the envdir.</p>
+
+<h4>What is <code>envdir</code>?</h4>
+
+<p><a href="https://cr.yp.to/daemontools/envdir.html">https://cr.yp.to/daemontools/envdir.html</a></p>
+
+<blockquote><p><code>envdir</code> runs another program with environment modified according to files in a specified directory.</p></blockquote>
+
+<h4>Why not use <code>dotenv</code>?</h4>
+
+<p><code>dotenv</code> isn&rsquo;t meant for production and <code>envdir</code> integrate nicely with <code>runit</code>.</p>
+
+<h4>So how can I fix it?</h4>
+
+<p>Add to the rake command prefix in SSHKit.</p>
+
+<p>Create a new Capistrano task</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># lib/capistrano/tasks/envdir.rake
+</span><span class='line'>
+</span><span class='line'>desc 'Prefix rake tasks with envidr'
+</span><span class='line'>namespace :envdir do
+</span><span class='line'>  task :prefix_rake do
+</span><span class='line'>      SSHKit.config.command_map.prefix[:rake].unshift 'envdir /path/to/env/directory'
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create a new Capistrano task: <code>envdir:prefix_rake</code>. By using <code>unshift</code>
+we ensure that if the prefix has already been set (for example by <code>capistrano/bundler</code>)
+that we don&rsquo;t overwrite what is already there.</p>
+
+<p>Wire it up.</p>
+
+<p>Load the rake task</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Capfile
+</span><span class='line'>
+</span><span class='line'>Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Inject the new task</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># config/deploy.rb
+</span><span class='line'>
+</span><span class='line'>before 'deploy:starting', 'envdir:prefix_rake'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Capistrano will now run rake tasks prefixed. For example,
+here is how the asset precompilation task will run (assumes <code>capistrano/bundler</code>
+has been required as part of <code>capitrano/rails</code>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>envdir /path/to/env/directory bundle exec rake assets:precompile</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Modeling Adjacency Lists in Ruby]]></title>
     <link href="http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby/"/>
-    <updated>2015-04-29T11:07:35-04:00</updated>
+    <updated>2015-04-29T10:07:35-05:00</updated>
     <id>http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby</id>
     <content type="html"><![CDATA[<p>Normally, this would be a task I would try to keep in my data layer
 since PostgreSQL is so great at doing this with recursive queries. However,
@@ -234,7 +315,7 @@ or other data structure.</p>
   <entry>
     <title type="html"><![CDATA[Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger]]></title>
     <link href="http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/"/>
-    <updated>2015-03-17T23:26:06-04:00</updated>
+    <updated>2015-03-17T22:26:06-05:00</updated>
     <id>http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger</id>
     <content type="html"><![CDATA[<p>The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
 information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
@@ -291,7 +372,7 @@ versus the existing Unicorn setup.</p>
   <entry>
     <title type="html"><![CDATA[Autoscaling Resque Workers on Heroku With the Platform-api Gem]]></title>
     <link href="http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/"/>
-    <updated>2015-01-29T10:25:03-05:00</updated>
+    <updated>2015-01-29T09:25:03-06:00</updated>
     <id>http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api</id>
     <content type="html"><![CDATA[<p>Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
 If you have background workers that do variable amounts of work it makes sense to scale up the number of workers as new jobs
@@ -395,7 +476,7 @@ to handle the Resque::TermException for jobs.</p>
   <entry>
     <title type="html"><![CDATA[Careful With Those Inflectors: A Tale of Performance Tuning Rails]]></title>
     <link href="http://code.eklund.io/blog/2014/08/12/careful-with-those-infelectors/"/>
-    <updated>2014-08-12T16:48:19-04:00</updated>
+    <updated>2014-08-12T15:48:19-05:00</updated>
     <id>http://code.eklund.io/blog/2014/08/12/careful-with-those-infelectors</id>
     <content type="html"><![CDATA[<p>We run our website at kaboom.org on a custom-built Rails 4-based CMS and for a long
 time I was unhappy with performance of the site. Not that it wasn&rsquo;t responsive and
@@ -486,7 +567,7 @@ the CMS. The performance increase was noticable immediately:</p>
   <entry>
     <title type="html"><![CDATA[Safely Ignoring Heroku Errors on Rake Db:migrate]]></title>
     <link href="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/"/>
-    <updated>2014-05-27T17:37:30-04:00</updated>
+    <updated>2014-05-27T16:37:30-05:00</updated>
     <id>http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate</id>
     <content type="html"><![CDATA[<p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
 
@@ -556,7 +637,7 @@ This means that <code>db:migrate</code> will raise an error on Heroku.</p>
   <entry>
     <title type="html"><![CDATA[First Post]]></title>
     <link href="http://code.eklund.io/blog/2014/05/21/first-post/"/>
-    <updated>2014-05-21T11:08:52-04:00</updated>
+    <updated>2014-05-21T10:08:52-05:00</updated>
     <id>http://code.eklund.io/blog/2014/05/21/first-post</id>
     <content type="html"><![CDATA[<p><strong>Hello? Is this thing on?</strong></p>
 

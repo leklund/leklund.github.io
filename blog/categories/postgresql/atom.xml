@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgresql | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-04-29T11:10:12-04:00</updated>
+  <updated>2016-09-23T13:57:37-05:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Safely Ignoring Heroku Errors on Rake Db:migrate]]></title>
     <link href="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/"/>
-    <updated>2014-05-27T17:37:30-04:00</updated>
+    <updated>2014-05-27T16:37:30-05:00</updated>
     <id>http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate</id>
     <content type="html"><![CDATA[<p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
 

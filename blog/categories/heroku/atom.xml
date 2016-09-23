@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-04-29T11:10:12-04:00</updated>
+  <updated>2016-09-23T13:57:37-05:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger]]></title>
     <link href="http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/"/>
-    <updated>2015-03-17T23:26:06-04:00</updated>
+    <updated>2015-03-17T22:26:06-05:00</updated>
     <id>http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger</id>
     <content type="html"><![CDATA[<p>The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
 information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
@@ -73,7 +73,7 @@ versus the existing Unicorn setup.</p>
   <entry>
     <title type="html"><![CDATA[Autoscaling Resque Workers on Heroku With the Platform-api Gem]]></title>
     <link href="http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/"/>
-    <updated>2015-01-29T10:25:03-05:00</updated>
+    <updated>2015-01-29T09:25:03-06:00</updated>
     <id>http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api</id>
     <content type="html"><![CDATA[<p>Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
 If you have background workers that do variable amounts of work it makes sense to scale up the number of workers as new jobs
@@ -144,7 +144,7 @@ end
   <entry>
     <title type="html"><![CDATA[Safely Ignoring Heroku Errors on Rake Db:migrate]]></title>
     <link href="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/"/>
-    <updated>2014-05-27T17:37:30-04:00</updated>
+    <updated>2014-05-27T16:37:30-05:00</updated>
     <id>http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate</id>
     <content type="html"><![CDATA[<p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Resque | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/resque/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2015-04-29T11:10:12-04:00</updated>
+  <updated>2016-09-23T13:57:37-05:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Autoscaling Resque Workers on Heroku With the Platform-api Gem]]></title>
     <link href="http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/"/>
-    <updated>2015-01-29T10:25:03-05:00</updated>
+    <updated>2015-01-29T09:25:03-06:00</updated>
     <id>http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api</id>
     <content type="html"><![CDATA[<p>Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
 If you have background workers that do variable amounts of work it makes sense to scale up the number of workers as new jobs

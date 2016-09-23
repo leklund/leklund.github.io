@@ -83,6 +83,126 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/">Making Capistrano Rake Tasks Work With Envdir</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-09-23T13:10:48-05:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2016</time>
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+        
+           | <a href="/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/#disqus_thread"
+             data-disqus-identifier="http://code.eklund.io/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Using envdir to manage environment variables for a Ruby app means that rake tasks run via
+Capistrano can fail or have unexpected output because the ENV hash won&rsquo;t be populated with
+what is located in the envdir.</p>
+
+<h4>What is <code>envdir</code>?</h4>
+
+<p><a href="https://cr.yp.to/daemontools/envdir.html">https://cr.yp.to/daemontools/envdir.html</a></p>
+
+<blockquote><p><code>envdir</code> runs another program with environment modified according to files in a specified directory.</p></blockquote>
+
+<h4>Why not use <code>dotenv</code>?</h4>
+
+<p><code>dotenv</code> isn&rsquo;t meant for production and <code>envdir</code> integrate nicely with <code>runit</code>.</p>
+
+<h4>So how can I fix it?</h4>
+
+<p>Add to the rake command prefix in SSHKit.</p>
+
+<p>Create a new Capistrano task</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># lib/capistrano/tasks/envdir.rake
+</span><span class='line'>
+</span><span class='line'>desc 'Prefix rake tasks with envidr'
+</span><span class='line'>namespace :envdir do
+</span><span class='line'>  task :prefix_rake do
+</span><span class='line'>      SSHKit.config.command_map.prefix[:rake].unshift 'envdir /path/to/env/directory'
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create a new Capistrano task: <code>envdir:prefix_rake</code>. By using <code>unshift</code>
+we ensure that if the prefix has already been set (for example by <code>capistrano/bundler</code>)
+that we don&rsquo;t overwrite what is already there.</p>
+
+<p>Wire it up.</p>
+
+<p>Load the rake task</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Capfile
+</span><span class='line'>
+</span><span class='line'>Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Inject the new task</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># config/deploy.rb
+</span><span class='line'>
+</span><span class='line'>before 'deploy:starting', 'envdir:prefix_rake'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Capistrano will now run rake tasks prefixed. For example,
+here is how the asset precompilation task will run (assumes <code>capistrano/bundler</code>
+has been required as part of <code>capitrano/rails</code>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>envdir /path/to/env/directory bundle exec rake assets:precompile</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/04/29/modeling-adjacency-lists-in-ruby/">Modeling Adjacency Lists in Ruby</a></h1>
     
     
@@ -99,7 +219,7 @@
   
 
 
-<time datetime="2015-04-29T11:07:35-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2015</time>
+<time datetime="2015-04-29T10:07:35-05:00" pubdate data-updated="true">Apr 29<span>th</span>, 2015</time>
         
 
 <span class="categories">
@@ -356,7 +476,7 @@ or other data structure.</p>
   
 
 
-<time datetime="2015-03-17T23:26:06-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2015</time>
+<time datetime="2015-03-17T22:26:06-05:00" pubdate data-updated="true">Mar 17<span>th</span>, 2015</time>
         
 
 <span class="categories">
@@ -452,7 +572,7 @@ versus the existing Unicorn setup.</p>
   
 
 
-<time datetime="2015-01-29T10:25:03-05:00" pubdate data-updated="true">Jan 29<span>th</span>, 2015</time>
+<time datetime="2015-01-29T09:25:03-06:00" pubdate data-updated="true">Jan 29<span>th</span>, 2015</time>
         
 
 <span class="categories">
@@ -595,7 +715,7 @@ to handle the Resque::TermException for jobs.</p>
   
 
 
-<time datetime="2014-08-12T16:48:19-04:00" pubdate data-updated="true">Aug 12<span>th</span>, 2014</time>
+<time datetime="2014-08-12T15:48:19-05:00" pubdate data-updated="true">Aug 12<span>th</span>, 2014</time>
         
 
 <span class="categories">
@@ -725,7 +845,7 @@ the CMS. The performance increase was noticable immediately:</p>
   
 
 
-<time datetime="2014-05-27T17:37:30-04:00" pubdate data-updated="true">May 27<span>th</span>, 2014</time>
+<time datetime="2014-05-27T16:37:30-05:00" pubdate data-updated="true">May 27<span>th</span>, 2014</time>
         
 
 <span class="categories">
@@ -834,7 +954,7 @@ This means that <code>db:migrate</code> will raise an error on Heroku.</p>
   
 
 
-<time datetime="2014-05-21T11:08:52-04:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
+<time datetime="2014-05-21T10:08:52-05:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
         
 
 <span class="categories">
@@ -880,6 +1000,10 @@ my memory fails me I can just google for my old posts.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/">Making Capistrano Rake Tasks Work With Envdir</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/04/29/modeling-adjacency-lists-in-ruby/">Modeling Adjacency Lists in Ruby</a>
       </li>
     
@@ -893,10 +1017,6 @@ my memory fails me I can just google for my old posts.</p>
     
       <li class="post">
         <a href="/blog/2014/08/12/careful-with-those-infelectors/">Careful With Those Inflectors: A Tale of Performance Tuning Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/">Safely Ignoring Heroku Errors on Rake Db:migrate</a>
       </li>
     
   </ul>
@@ -921,7 +1041,7 @@ my memory fails me I can just google for my old posts.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Lukas Eklund -
+  Copyright &copy; 2016 - Lukas Eklund -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
