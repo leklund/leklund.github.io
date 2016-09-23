@@ -1,0 +1,14 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Node</span>
+  <span class="kp">attr_accessor</span> <span class="ss">:id</span><span class="p">,</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:parent</span><span class="p">,</span> <span class="ss">:children</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">opts</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@id</span> <span class="o">=</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span>
+    <span class="vi">@name</span> <span class="o">=</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span>
+    <span class="vi">@parent</span> <span class="o">=</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:parent</span><span class="o">]</span>
+
+    <span class="c1"># add children if passed an array or initialize as an empty array</span>
+    <span class="vi">@children</span> <span class="o">=</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:children</span><span class="o">].</span><span class="n">is_a?</span><span class="p">(</span><span class="nb">Array</span><span class="p">)</span> <span class="p">?</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:children</span><span class="o">]</span> <span class="p">:</span> <span class="o">[]</span>
+
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>

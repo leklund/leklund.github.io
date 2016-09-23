@@ -1,0 +1,31 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Tree</span>
+  <span class="kp">attr_accessor</span> <span class="ss">:nodes</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vi">@nodes</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="vi">@nodes</span><span class="o">[</span><span class="nb">id</span><span class="o">]</span>
+  <span class="k">end</span>
+
+  <span class="c1"># helper for hash-like access</span>
+  <span class="k">def</span> <span class="nf">[]</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">node</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">node</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2"> != Node&quot;</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">class</span> <span class="o">!=</span> <span class="no">Node</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">nil?</span>
+      <span class="c1"># check if the parent is part of the tree</span>
+      <span class="n">existing_parent</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">existing_parent</span><span class="o">.</span><span class="n">nil?</span>
+        <span class="k">raise</span> <span class="s2">&quot;Unable to add node </span><span class="si">#{</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> to the tree. It specifies a parent </span><span class="si">#{</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> That has not been added to the tree&quot;</span>
+      <span class="k">end</span>
+      <span class="n">node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">existing_parent</span>
+      <span class="n">existing_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">uniq</span>
+    <span class="k">end</span>
+    <span class="vi">@nodes</span><span class="o">[</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="o">]</span> <span class="o">=</span> <span class="n">node</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>

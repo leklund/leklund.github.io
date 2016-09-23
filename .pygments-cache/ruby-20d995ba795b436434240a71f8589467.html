@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="n">nodes</span> <span class="o">=</span> <span class="o">[</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">,</span> <span class="n">n4</span><span class="p">,</span> <span class="n">n5</span><span class="o">]</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="no">Tree</span><span class="o">.</span><span class="n">new</span>
+<span class="n">nodes</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">tree</span><span class="o">.</span><span class="n">add_node</span> <span class="n">n</span><span class="p">}</span>
+
+<span class="n">tree</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>         <span class="c1">#=&gt; &#39;four&#39;</span>
+<span class="n">tree</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span>  <span class="c1">#=&gt; &#39;three&#39;</span>
+<span class="n">tree</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:id</span><span class="p">)</span>     <span class="c1">#=&gt; [2,3]</span>
+</pre></div>

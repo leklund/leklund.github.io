@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rails | code.eklund.io]]></title>
+  <link href="http://code.eklund.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://code.eklund.io/"/>
+  <updated>2016-09-23T13:42:46-05:00</updated>
+  <id>http://code.eklund.io/</id>
+  <author>
+    <name><![CDATA[Lukas Eklund]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Making Capistrano Rake Tasks Work With Envdir]]></title>
+    <link href="http://code.eklund.io/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/"/>
+    <updated>2016-09-23T13:10:48-05:00</updated>
+    <id>http://code.eklund.io/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir</id>
+    <content type="html"><![CDATA[<p>Using envdir to manage environment variables for a Ruby app means that rake tasks run via
+Capistrano can fail or have unexpected output because the ENV hash won&rsquo;t be populated with
+what is located in the envdir.</p>
+
+<h4>What is <code>envdir</code>?</h4>
+
+<p><a href="https://cr.yp.to/daemontools/envdir.html">https://cr.yp.to/daemontools/envdir.html</a></p>
+
+<blockquote><p><code>envdir</code> runs another program with environment modified according to files in a specified directory.</p></blockquote>
+
+<h4>Why not use <code>dotenv</code>?</h4>
+
+<p><code>dotenv</code> isn&rsquo;t meant for production and <code>envdir</code> integrate nicely with <code>runit</code>.</p>
+
+<h4>So how can I fix it?</h4>
+
+<p>Add to the rake command prefix in SSHKit.</p>
+
+<p>Create a new Capistrano task</p>
+
+<p>```</p>
+
+<h1>lib/capistrano/tasks/envdir.rake</h1>
+
+<p>desc &lsquo;Prefix rake tasks with envidr&rsquo;
+namespace :envdir do
+  task :prefix_rake do</p>
+
+<pre><code>  SSHKit.config.command_map.prefix[:rake].unshift 'envdir /path/to/env/directory'
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>This will create a new Capistrano task: <code>envdir:prefix_rake</code>. By using <code>unshift</code>
+we ensure that if the prefix has already been set (for example by <code>capistrano/bundler</code>)
+that we don&rsquo;t overwrite what is already there.</p>
+
+<p>Wire it up.</p>
+
+<p>Load the rake task
+```</p>
+
+<h1>Capfile</h1>
+
+<p>Dir.glob(&lsquo;lib/capistrano/tasks/*.rake&rsquo;).each { |r| import r }
+```</p>
+
+<p>Inject the new task
+```</p>
+
+<h1>config/deploy.rb</h1>
+
+<p>before &lsquo;deploy:starting&rsquo;, &lsquo;envdir:prefix_rake&rsquo;
+```</p>
+
+<p>Capistrano will now run rake tasks prefixed. For example,
+here is how the asset precompilation task will run (assumes <code>capistrano/bundler</code>
+has been required as part of <code>capitrano/rails</code>)</p>
+
+<p><code>
+envdir /path/to/env/directory bundle exec rake assets:precompile
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Managing Rewrites for a Rails App on Heroku With Nginx + Phusion Passenger]]></title>
+    <link href="http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/"/>
+    <updated>2015-03-17T22:26:06-05:00</updated>
+    <id>http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger</id>
+    <content type="html"><![CDATA[<p>The custom CMS that we built for kaboom.org has to manage a lot of rewrite rules because the
+information architecture keeps getting rejiggered. We were managing them with Rack::Rewrite
+but I always hated having a huge stack of rewrites in the application.rb configuration. Since the app
+is hosted Heroku there weren&rsquo;t really any other options until I realized that Phusion Passenger
+will now run in standalone mode on Heroku.</p>
+
+<p>It&rsquo;s quite easy to get Passenger running on Heroku: <a href="https://github.com/phusion/passenger-ruby-heroku-demo">https://github.com/phusion/passenger-ruby-heroku-demo</a></p>
+
+<p>replace the app server in your Gemfile (unicorn, thin, puma, etc) with</p>
+
+<pre><code>gem 'passenger'
+</code></pre>
+
+<p>Update your Procfile</p>
+
+<pre><code>web: bundle exec passenger start -p $PORT --max-pool-size 3
+</code></pre>
+
+<p>This works great but doesn&rsquo;t come with an obvious was to edit the nginx.conf to add rewrite rules or an include directive.
+According to the <a href="https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#advanced_configuration">advanced configuration</a> section
+of the Passenger standalone manual, we see that there is an option to pass a configuration template.</p>
+
+<p>After adding Passenger to your Gemfile and running a <code>bundle install</code> tun this from you application root directory
+to create a configuration template.</p>
+
+<pre><code>cp $(passenger-config about resourcesdir)/templates/standalone/config.erb config/nginx.conf.erb
+</code></pre>
+
+<p>You could just add rewrites to this file but because the default configuration template may change from time to time
+I would recommend adding any custom configuration to another file. Just after the <code>server {</code> line add</p>
+
+<pre><code>include '&lt;%= app[:root] %&gt;/config/nginx_custom_config.conf';
+</code></pre>
+
+<p>Create this file in the config directory of your app and add all of your rewrite rules and custom directives to this file.</p>
+
+<p>If you are using this to perform rewrites and you are running on Heroku, this needs to be included</p>
+
+<pre><code>&lt;% if app[:environment] != 'development' %&gt;
+  port_in_redirect off;
+&lt;% end %&gt;
+</code></pre>
+
+<p>Because Nginx is listening on the random port assigned by the Heroku routing layer Nginx will, by default, include this port
+number in the rewrite rules that do HTTP redirects. The conditional makes sure that when running on localhost:5000 redirects still work as intended in your development environment.</p>
+
+<p>Other use cases include enforcing SSL on your app, adding HTTP basic auth to an app, and easier generation of CORS headers.
+So far I&rsquo;m loving Phusion Passenger standalone on Heroku. In a future post I plan to examine the performance and memory usage
+versus the existing Unicorn setup.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Autoscaling Resque Workers on Heroku With the Platform-api Gem]]></title>
+    <link href="http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/"/>
+    <updated>2015-01-29T09:25:03-06:00</updated>
+    <id>http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api</id>
+    <content type="html"><![CDATA[<p>Heroku is a great service and is extremely powerful. It&rsquo;s also not cheap so leaving workers idling can cost you a lot of money.
+If you have background workers that do variable amounts of work it makes sense to scale up the number of workers as new jobs
+are queued and then scale back down as the queue clears.</p>
+
+<p>Here is how one might scale workers using <a href="https://github.com/resque/resque/blob/master/docs/HOOKS.md">resque hooks</a> and the <a href="https://github.com/heroku/platform-api">Heroku platform-api</a> gem.
+This example scales up a worker for every three pending jobs. It will scale down once the queue is empty and
+all the workers are finished. It will also scale down when the number of idling dynos is greater than 5.
+Because it is not possible to control which dynos are killed off, this assumes that your resque workers are handling TERM
+signals (and hopefully the jobs are idempotent). It is likely that the downscale could kill off working dynos so the jobs so be sure
+to handle the Resque::TermException for jobs.</p>
+
+<p>```</p>
+
+<h1>config/initializers/heroku-platform-api.rb</h1>
+
+<p>$heroku = PlatformAPI.connect_oauth(ENV[&lsquo;HEROKU_OAUTH_TOKEN&rsquo;])</p>
+
+<h1>lib/scaled_job.rb</h1>
+
+<p>require &lsquo;platform-api&rsquo;</p>
+
+<p>module ScaledJob
+  def after_enqueue_upscale(*args)</p>
+
+<pre><code>worker_count = $heroku.formation.info('app-name','worker')["quantity"]
+job_count = Resque.info[:pending].to_i
+# one worker for every 3 jobs (minimum of 1)
+new_worker_count = ((job_count / 3) + 1).to_i
+if new_worker_count &gt; worker_count
+  $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; new_worker_count})
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  def after_perform_downscale</p>
+
+<pre><code>worker_count = $heroku.formation.info('app-name','worker')["quantity"]
+working = Resque.info[:working].to_i
+if Resque.info[:pending].to_i == 0 &amp;&amp; working &lt;= 1
+    $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; 1})
+elsif Resque.info[:pending].to_i &lt;= 1 &amp;&amp; ((working + 5) &lt; worker_count)
+    new_worker_count = working + 5
+    $heroku.formation.update('app-name', 'worker', {"quantity" =&gt; new_worker_count})
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<h1>model class</h1>
+
+<p>class Foo
+  extend ScaledJob</p>
+
+<p>  def self.perform(*args)</p>
+
+<pre><code># work it!
+</code></pre>
+
+<p>  end
+end
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Careful With Those Inflectors: A Tale of Performance Tuning Rails]]></title>
+    <link href="http://code.eklund.io/blog/2014/08/12/careful-with-those-infelectors/"/>
+    <updated>2014-08-12T15:48:19-05:00</updated>
+    <id>http://code.eklund.io/blog/2014/08/12/careful-with-those-infelectors</id>
+    <content type="html"><![CDATA[<p>We run our website at kaboom.org on a custom-built Rails 4-based CMS and for a long
+time I was unhappy with performance of the site. Not that it wasn&rsquo;t responsive and
+a huge (and I mean HUGE) improvement over the previous drupal mess, but requests
+were spending more time than seemed necessary just in the ruby layer. Most requests were spending
+almost 500ms there according to NewRelic traces.</p>
+
+<p>I installed some tools locally to help track down where and why it was spending
+so much time each request. The gem <a href="https://github.com/MiniProfiler/rack-mini-profiler">rack-mini-profiler</a> got me started and it is
+a great way to get data on each and every request.
+This helped me track down some code that was dynamically creating <code>store_accessors</code> for every request. There is an easy way to check if a
+given <code>stored_attribute</code> exists on a class:</p>
+
+<p><code>
+Post.stored_attributes[:options].include?("some_attribute")
+</code></p>
+
+<p>Implementing this check and only adding the store_accessors when needed
+provided a small performance increase but each request was still spending way
+too much time in ruby. I spent some time trying to get usable data from
+flamegraphs and also experimented with adding &lsquo;step&rsquo; blocks in my code to help
+track down where things were slow. The problem I found with rack-mini-profiler
+was that the rails stack is so deep it makes it very hard to see exacty where
+the problems are. I still have it installed on a local branch that and I find
+it very useful in some cases. But for this issue, it left me digging through a
+convoluted flame graph and I decided to move on.</p>
+
+<p>It was at this point I took a few weeks off from profiling and also took a
+vacation. Several weeks later I was preparing for a bug day and was getting
+error traces from New Relic to add to Trello that I revisited the performance
+issues.  We are on Heroku so I decided to switch our free New Relic plan to the
+plan the provides the paid-level features for a limited number of dynos. What
+this gave me was access to my new favorite profiling tool: the New Relic thread
+profiler. I ran the tool for a 5 minute trace and this was the result:</p>
+
+<p><img class="center" src="/images/blog/newrelicprof.png"></p>
+
+<p>I had to uncollapse a few parts of the tree but it&rsquo;s pretty clear that the
+request was spending over 56% of the time in the name method on the
+ContentField model. Which, as it turns out, was a method that was no longer
+even needed.
+The offending, extraneous code:</p>
+
+<p><code>ruby
+def name
+  return super if super.nil? || super.blank?
+  super.downcase.parameterize.underscore
+end
+</code></p>
+
+<p>I think this was added in the initial phases of building our CMS to ensure
+conformity with seeded names alongside imported field names from Drupal. The
+drupal importer I wrote handled all the transformations and there are
+validations so enure that field names are created properly. This method does
+nothing at all except run downcase, parameterize, and underscore on strings
+that already conform to that format. And, as it turns out, <em>inflectors don&rsquo;t
+come cheap</em>. I removed the method, ran my tests, and deployed a new version of
+the CMS. The performance increase was noticable immediately:</p>
+
+<p><img class="center" src="/images/blog/transaction_performance.png"></p>
+
+<p>It&rsquo;s not everyday that removing 4 lines of code (well, it was really just one) can give you such a boost in performance. Lessons learned:</p>
+
+<ol>
+<li>Careful with those inflectors! They can end up being performance bottlenecks.</li>
+<li>Just because it was cached in memcache doesn&rsquo;t mean the object initialization doesn&rsquo;t incur the same cost.</li>
+<li>NewRelic thread profiling is pretty awesome</li>
+<li>rack-mini-profiler combined with flame graphs is an incredible tool that I need to spend more time learning how to use properly.</li>
+<li>Careful with adding dynamic stored attributes with an after_initialize. They get added as class methods so only need to be added once.</li>
+</ol>
+
+
+<p>Helpful links:</p>
+
+<ul>
+<li><a href="http://samsaffron.com/archive/2012/07/12/miniprofiler-ruby-edition">miniprofiler ruby edition</a></li>
+<li><a href="http://samsaffron.com/archive/2013/03/19/flame-graphs-in-ruby-miniprofiler">Flame graphs in Ruby MiniProfiler</a></li>
+<li><a href="https://docs.newrelic.com/docs/apm/applications-menu/events/thread-profiler-dashboard">New Relic Thread Profiler docs</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Safely Ignoring Heroku Errors on Rake Db:migrate]]></title>
+    <link href="http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/"/>
+    <updated>2014-05-27T16:37:30-05:00</updated>
+    <id>http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate</id>
+    <content type="html"><![CDATA[<p>(Repurposing my answer to this <a href="http://stackoverflow.com/questions/17300341/migrate-not-working-on-heroku/17306077">stackoverflow question</a> as a blog post)</p>
+
+<p>If you are using Rails 4.x on Heroku and you have your schema format set to sql (which you probably should), you will see this error when running <code>heroku run rake db:migrate</code></p>
+
+<p><code>
+Aborted!
+Error dumping database
+.../activerecord-4.0.4/lib/active_record/tasks/postgresql_database_tasks.rb:55:in `structure_dump'
+.../activerecord-4.0.4/lib/active_record/tasks/database_tasks.rb:143:in `structure_dump'
+</code></p>
+
+<p>This is an interesting bug that, as it turns out, can be ignored.</p>
+
+<p>ActiveRecord will only run the task <code>db:structure:dump</code> if you are using &lsquo;sql&rsquo; as
+your <code>active_record.schema_format</code>.  And that rake task (<code>db:structure:dump</code>) will
+fail on Heroku because the executable <code>pg_dump</code> is (unsurprisingly) not in the
+binary path.  Interestingly enough, Heroku states that <code>db:schema:dump</code> is not
+supported but if you set the schema format to ruby, it works fine. Of course,
+you would end up with a <code>schema.rb</code> file on one-off dyno that will not exist
+shortly after the rake task finished running.</p>
+
+<p>In Rails 3, the dump task would only raise an error is the exit code of the
+command was 1. On unix based systems if a command is not found, the exit code
+is 127.  So even if the <code>pg_dump</code> command fails on Rails 3 (which it does), it
+won&rsquo;t raise an error and it won&rsquo;t halt the rake task. So anyone using a sql
+schema format with Rails 3 wouldn&rsquo;t have this issue because it would fail
+silently. The code was refactored in Rails 4 to properly raise an error if the dump failed.
+This means that <code>db:migrate</code> will raise an error on Heroku.</p>
+
+<p><strong>However, even though it errors with rake aborted the DDL from the migration is actually executed and committed.</strong></p>
+
+<p>Here are some possible solutions (if the error really bothers you):</p>
+
+<ul>
+<li>Ignore the error as the migrations are actually running.</li>
+<li>Since you don&rsquo;t care about the structure dump on production, set the schema_format to ruby. In config/environments/production.rb:</li>
+</ul>
+
+
+<p><code>ruby
+config.active_record.schema_format = :ruby
+</code></p>
+
+<ul>
+<li>If for some reason you don&rsquo;t want to change the config file: add a rake task with the following to suppress the error:</li>
+</ul>
+
+
+<p>``` ruby
+if Rails.env == &lsquo;production&rsquo;</p>
+
+<pre><code>Rake::Task["db:structure:dump"].clear
+</code></pre>
+
+<p>end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>
