@@ -4,7 +4,7 @@
   <title><![CDATA[code.eklund.io]]></title>
   <link href="http://code.eklund.io/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2016-09-23T13:57:37-05:00</updated>
+  <updated>2016-09-23T13:58:49-05:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -22,17 +22,17 @@
 Capistrano can fail or have unexpected output because the ENV hash won&rsquo;t be populated with
 what is located in the envdir.</p>
 
-<h4>What is <code>envdir</code>?</h4>
+<h3>What is <code>envdir</code>?</h3>
 
 <p><a href="https://cr.yp.to/daemontools/envdir.html">https://cr.yp.to/daemontools/envdir.html</a></p>
 
 <blockquote><p><code>envdir</code> runs another program with environment modified according to files in a specified directory.</p></blockquote>
 
-<h4>Why not use <code>dotenv</code>?</h4>
+<h3>Why not use <code>dotenv</code>?</h3>
 
 <p><code>dotenv</code> isn&rsquo;t meant for production and <code>envdir</code> integrate nicely with <code>runit</code>.</p>
 
-<h4>So how can I fix it?</h4>
+<h3>So how can I fix it?</h3>
 
 <p>Add to the rake command prefix in SSHKit.</p>
 
