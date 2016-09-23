@@ -122,17 +122,18 @@
 Capistrano can fail or have unexpected output because the ENV hash won&rsquo;t be populated with
 what is located in the envdir.</p>
 
-<h3>What is <code>envdir</code>?</h3>
+<p><strong>What is <code>envdir</code>?</strong></p>
 
 <p><a href="https://cr.yp.to/daemontools/envdir.html">https://cr.yp.to/daemontools/envdir.html</a></p>
 
 <blockquote><p><code>envdir</code> runs another program with environment modified according to files in a specified directory.</p></blockquote>
 
-<h3>Why not use <code>dotenv</code>?</h3>
+<p><strong>Why not use <code>dotenv</code>?</strong></p>
 
-<p><code>dotenv</code> isn&rsquo;t meant for production and <code>envdir</code> integrate nicely with <code>runit</code>.</p>
+<p><code>dotenv</code> isn&rsquo;t meant for production and <code>envdir</code> integrates nicely with <code>runit</code>. And if that&rsquo;s how your
+SRE team wants to manage apps themn that&rsquo;s what you use.</p>
 
-<h3>So how can I fix it?</h3>
+<p><strong>So how can I fix it?</strong></p>
 
 <p>Add to the rake command prefix in SSHKit.</p>
 
