@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First Post - code.eklund.io</title>
+  <title>Bauditor Gem - Bundle-audit Multiple Repos - code.eklund.io</title>
   <meta name="author" content="Lukas Eklund">
 
   
-  <meta name="description" content="First Post">
-  <meta name="keywords" content="ruby, 42, rails, postgresql, heroku, postgis">
+  <meta name="description" content="musings on code, work, raising kids, and the meaning of life, the universe, and everything.">
+  <meta name="keywords" content="ruby,rails,bundler, bundler-audit, security">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="initial-scale=1">
 
   
-  <link rel="canonical" href="http://code.eklund.io/blog/2014/05/21/first-post">
+  <link rel="canonical" href="http://code.eklund.io/blog/2017/01/25/bauditor-gem-bundle-audit-multiple-repos">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="code.eklund.io" type="application/atom+xml">
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">First Post</h1>
+      <h1 class="entry-title">Bauditor Gem - Bundle-audit Multiple Repos</h1>
     
     
       <p class="meta">
@@ -96,12 +96,12 @@
   
 
 
-<time datetime="2014-05-21T10:08:52-05:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
+<time datetime="2017-01-25T17:18:03-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2017</time>
         
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/misc/'>misc</a>
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -115,13 +115,33 @@
   </header>
 
 
-<div class="entry-content"><p><strong>Hello? Is this thing on?</strong></p>
+<div class="entry-content"><p>I was adding <a href="https://github.com/rubysec/bundler-audit">bundler-audit</a> to a ruby application recently and I had this idea that it would be really nice to be able to run it on multiple repositories at once. It&rsquo;s great when you get the status as part of a CI run or a rake task, but if you have some applications that are seldom updated it&rsquo;s important to audit them as well. So I made a thing.</p>
 
-<p>I was testing out Octopress and decided it was time to finally start a blog. No,
-this won&rsquo;t be the realization of my imaginary blog about the art of the movie trailer.
-This will be about my experiences with Ruby, Rails, PostgreSQL, Redis, etc.
-I hope that by documenting what I have learned that I can help others along they way. Plus, as I age and
-my memory fails me I can just google for my old posts.</p>
+<p>Introducing <a href="https://github.com/leklund/bauditor">bauditor</a>, a simple gem to help you run bundle-audit on multiple repositories in one pass. It will take a config file with a list of git repositories or you can pass them in on the command line:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bauditor help audit
+</span><span class='line'>Usage:
+</span><span class='line'>  bauditor audit
+</span><span class='line'>
+</span><span class='line'>Options:
+</span><span class='line'>  r, [--repos=one two three]
+</span><span class='line'>  c, [--config=CONFIG]
+</span><span class='line'>
+</span><span class='line'>run bundle-audit on multiple repositories</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It will clone each repo into a tempdir and then run <code>bundle-audit</code>. It prints a handy summary at the end. It cleans up after each run so it&rsquo;s not super fast yet. One of the features I want to add is the ability to persist the repositories as well as specify the repository path.</p>
+
+<p>Check it out on rubygems: <a href="https://rubygems.org/gems/bauditor">bauditor 0.2.2</a>. Or get the source on <a href="https://github.com/leklund/bauditor">GitHub</a>.</p>
 </div>
 
 
@@ -136,8 +156,8 @@ my memory fails me I can just google for my old posts.</p>
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/" title="Previous Post: Making Capistrano rake tasks work with envdir">&laquo; Making Capistrano rake tasks work with envdir</a>
       
-        <a class="basic-alignment right" href="/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/" title="Next Post: Safely ignoring Heroku errors on rake db:migrate">Safely ignoring Heroku errors on rake db:migrate &raquo;</a>
       
     </p>
   </footer>
@@ -212,8 +232,8 @@ my memory fails me I can just google for my old posts.</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://code.eklund.io/blog/2014/05/21/first-post/';
-        var disqus_url = 'http://code.eklund.io/blog/2014/05/21/first-post/';
+        var disqus_identifier = 'http://code.eklund.io/blog/2017/01/25/bauditor-gem-bundle-audit-multiple-repos/';
+        var disqus_url = 'http://code.eklund.io/blog/2017/01/25/bauditor-gem-bundle-audit-multiple-repos/';
         var disqus_script = 'embed.js';
       
     (function () {

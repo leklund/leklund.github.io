@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2016-09-23T14:53:11-05:00</updated>
+  <updated>2017-01-25T17:20:33-06:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bauditor Gem - Bundle-audit Multiple Repos]]></title>
+    <link href="http://code.eklund.io/blog/2017/01/25/bauditor-gem-bundle-audit-multiple-repos/"/>
+    <updated>2017-01-25T17:18:03-06:00</updated>
+    <id>http://code.eklund.io/blog/2017/01/25/bauditor-gem-bundle-audit-multiple-repos</id>
+    <content type="html"><![CDATA[<p>I was adding <a href="https://github.com/rubysec/bundler-audit">bundler-audit</a> to a ruby application recently and I had this idea that it would be really nice to be able to run it on multiple repositories at once. It&rsquo;s great when you get the status as part of a CI run or a rake task, but if you have some applications that are seldom updated it&rsquo;s important to audit them as well. So I made a thing.</p>
+
+<p>Introducing <a href="https://github.com/leklund/bauditor">bauditor</a>, a simple gem to help you run bundle-audit on multiple repositories in one pass. It will take a config file with a list of git repositories or you can pass them in on the command line:</p>
+
+<p>```
+$ bauditor help audit
+Usage:
+  bauditor audit</p>
+
+<p>Options:
+  r, [&mdash;repos=one two three]
+  c, [&mdash;config=CONFIG]</p>
+
+<p>run bundle-audit on multiple repositories
+```</p>
+
+<p>It will clone each repo into a tempdir and then run <code>bundle-audit</code>. It prints a handy summary at the end. It cleans up after each run so it&rsquo;s not super fast yet. One of the features I want to add is the ability to persist the repositories as well as specify the repository path.</p>
+
+<p>Check it out on rubygems: <a href="https://rubygems.org/gems/bauditor">bauditor 0.2.2</a>. Or get the source on <a href="https://github.com/leklund/bauditor">GitHub</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Making Capistrano Rake Tasks Work With Envdir]]></title>
