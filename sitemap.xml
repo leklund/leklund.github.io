@@ -2,62 +2,66 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://code.eklund.io/blog/2014/05/21/first-post/</loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://code.eklund.io/blog/2014/05/27/ignoring-heroku-errors-on-rake-db-migrate/
         </loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>http://code.eklund.io/blog/2014/08/12/careful-with-those-infelectors/</loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://code.eklund.io/blog/2015/01/29/autoscaling-resque-workers-on-heroku-with-platform-api/
         </loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://code.eklund.io/blog/2015/03/17/managing-rewrites-for-a-rails-app-on-heroku-with-nginx-plus-phusion-passenger/
         </loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>http://code.eklund.io/blog/2015/04/29/modeling-adjacency-lists-in-ruby/</loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://code.eklund.io/blog/2016/09/23/making-capitstrano-rake-tasks-work-with-envdir/
         </loc>
-        <lastmod>2016-09-23T14:53:01-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
         <loc>http://code.eklund.io/blog/2017/01/25/bauditor-gem-bundle-audit-multiple-repos/</loc>
-        <lastmod>2017-01-25T17:19:46-06:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
     <url>
-        <loc>http://code.eklund.io/about/</loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://code.eklund.io/blog/archives/</loc>
-        <lastmod>2017-01-25T17:19:46-06:00</lastmod>
+        <loc>http://code.eklund.io/blog/2018/12/12/summed-area-table-in-ruby/</loc>
+        <lastmod>2018-12-12T14:55:42-06:00</lastmod>
     </url>
     <url>
         <loc>http://code.eklund.io/</loc>
-        <lastmod>2017-01-25T17:19:46-06:00</lastmod>
+        <lastmod>2018-12-12T14:55:42-06:00</lastmod>
     </url>
     <url>
         <loc>http://code.eklund.io/resume/</loc>
-        <lastmod>2017-08-30T12:12:26-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
+    </url>
+    <url>
+        <loc>http://code.eklund.io/about/</loc>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
+    </url>
+    <url>
+        <loc>http://code.eklund.io/blog/archives/</loc>
+        <lastmod>2018-12-12T14:55:42-06:00</lastmod>
     </url>
     <url>
         <loc>http://code.eklund.io/robots.txt</loc>
-        <lastmod>2016-09-23T13:57:33-05:00</lastmod>
+        <lastmod>2018-12-11T21:44:47-06:00</lastmod>
     </url>
 </urlset>

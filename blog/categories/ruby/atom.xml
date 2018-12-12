@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | code.eklund.io]]></title>
   <link href="http://code.eklund.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://code.eklund.io/"/>
-  <updated>2017-08-30T12:12:46-05:00</updated>
+  <updated>2018-12-12T14:55:52-06:00</updated>
   <id>http://code.eklund.io/</id>
   <author>
     <name><![CDATA[Lukas Eklund]]></name>
@@ -12,6 +12,115 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing a Summed-Area Table in Ruby]]></title>
+    <link href="http://code.eklund.io/blog/2018/12/12/summed-area-table-in-ruby/"/>
+    <updated>2018-12-12T12:32:47-06:00</updated>
+    <id>http://code.eklund.io/blog/2018/12/12/summed-area-table-in-ruby</id>
+    <content type="html"><![CDATA[<p>Day 11 of the <a href="https://adventofcode.com/2018/day/11">2018 Advent of Code</a> required you to generate a 300 x 300 matrix and then find
+the 3 x 3 sub-matrix that had the largest value. Then part 2 required you to find the largest sub-matrix
+of any size that had the maximum value. My first solution used a hash to map every entry in the
+matrix. The keys were an <code>[x,y]</code> array and the value was the value at that coordinate. Then by iterating over all rows
+and columns I could check every 3 x 3 area and find the maximum value. This worked but wasn&rsquo;t particularly fast (I believe the
+complexity was <code>O(N³)</code>).</p>
+
+<p>But then I got to part 2 and I had to check more than just 3 x 3 areas and my implementation was too slow. So I implemented a new
+solution using the <code>Matrix</code> class and the <code>minor</code> method so get the sub-matrix. You can see this implementation <a href="https://github.com/leklund/aoc/blob/master/2018/11.rb">here</a>.
+In hindsight this wasn&rsquo;t much faster then my first version I just guessed that the maximum area would be less than 20 x 20. One
+thing I should have done was to track the maximum value for each square size and exit if it ever went down.</p>
+
+<p>After solving it with a <code>Matrix</code> I wanted to speed up mu implementation so I read some of the tips on reddit which led to
+to the wikipedia article for
+the <a href="https://en.wikipedia.org/wiki/Summed-area_table">summed-area table</a>.
+This is exactly what I needed!</p>
+
+<blockquote><p>A summed-area table is a data structure and algorithm for quickly and efficiently generating the sum of values in a rectangular subset of a grid.</p></blockquote>
+
+<p>I didn&rsquo;t find a Ruby implementation so I decided to implement one for myself. First, here&rsquo;s a visualization of what the summed-area table (SAT) looks like:</p>
+
+<pre>
+4x4 matrix          SAT
+
+1  0  6  5       1  1  7 12
+4  8  6  7  -->  5 13 25 37
+5  3  0  9      10 21 33 54
+8  3  4  1      18 32 48 70
+</pre>
+
+
+<p>The formula for find the sum of the sub-matrix from (1, 1) to (2, 2) is then
+<code>sat[2, 2] + sat[0, 0] - sat[2, 0] - sat[0, 2]</code> which is
+<code>33 + 1 - 7 - 10 == 17</code>.</p>
+
+<p>Since we are starting from the top left in this example, the value for any cell in the SAT
+is the sum of all the cells above and the left of the cell.</p>
+
+<p>Since I&rsquo;m working with matrices I opted to extend (monkey-patch) <code>Matrix</code> with two methods: one for generating the summed-area table, the other to calculate an area.</p>
+
+<p>```ruby
+require &lsquo;matrix&rsquo;</p>
+
+<p>class Matrix
+  def summed_area_table</p>
+
+<pre><code>return @sat if @sat
+rows = row_count
+cols = column_count
+
+sat = Matrix.zero(rows, cols).to_a
+
+rows.times do |x|
+  cols.times do |y|
+    a = self[x, y]
+
+    b = sat.fetch(x - 1, []).fetch(y, 0)
+    c = sat[x].fetch(y - 1, 0)
+
+    d = x.zero? || y.zero? ? 0 : sat[x - 1][y - 1]
+
+    sat[x][y] = a + b + c - d
+  end
+end
+
+@sat = Matrix[*sat]
+</code></pre>
+
+<p>  end</p>
+
+<p>  def summed_area(x0, y0, x1, y1)</p>
+
+<pre><code>x0 = x0.zero? ? 0 : x0 - 1
+y0 = y0.zero? ? 0 : y0 - 1
+summed_area_table[x1, y1] +
+  summed_area_table[x0, y0] -
+  summed_area_table[x1, y0] -
+  summed_area_table[x0, y1]
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>With this new class I was able to <a href="https://github.com/leklund/aoc/blob/master/2018/11_opt.rb">optimize my AOC solution</a> and even though I knew that the size of the square in the answer for my input
+was 16 I still searched every possible size and it still performed faster than my original implementation. The code above for the summed-area calculation is also on <a href="https://github.com/leklund/aoc/blob/master/2018/summed_area.rb">github</a> (with some optimizations that shave some time off SAT generation).</p>
+
+<p>Usage example:</p>
+
+<p>```
+[1] pry(main)> require &lsquo;./summed_area&rsquo;
+=> true</p>
+
+<p>[2] pry(main)> m = Matrix.build(10000) { rand };    # It takes a several seconds to seed the 10,000 x 10,000 matrix</p>
+
+<p>[3] pry(main)> m.summed_area(100, 100, 5555, 4444)  # The first time this takes some time as the SAT is built
+=> 11852796.933710525</p>
+
+<p>[4] pry(main)> m.summed_area(1020, 666, 8341, 9900) # And now the calculation is instant!
+=> 33806690.016706355
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bauditor Gem - Bundle-audit Multiple Repos]]></title>
